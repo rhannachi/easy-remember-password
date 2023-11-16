@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Generator, Tabs } from '@/components'
+import { Button, Generator, Tabs } from '@/components'
 
 export default function Page() {
   const [nb, setNb] = useState(1)
@@ -24,12 +24,7 @@ export default function Page() {
           {Array.from({ length: nb }).map((_, index) => (
             <Generator key={index} />
           ))}
-          <button
-            className='rounded-md text-sm text-blue-600 font-semibold bg-white w-5 mt-5'
-            onClick={() => setNb((item) => item + 1)}
-          >
-            +
-          </button>
+          <Button label='+' className='w-5 mt-5' onClick={() => setNb((item) => item + 1)} />
         </div>
       </div>
     </main>

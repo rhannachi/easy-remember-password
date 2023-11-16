@@ -12,12 +12,13 @@ export const Select = ({ onSelected }: { onSelected: (value: string) => void }) 
   return (
     <label htmlFor='emoji-select'>
       <select
+        className='rounded text-blue-600 w-11 '
         value={selectedEmoji}
         onChange={(e) => setSelectedEmoji(e.target.value)}
         name='emoji'
         id='emoji-select'
       >
-        <option value=''>?</option>
+        <option value=''></option>
         <option value='🤬'>🤬</option>
         <option value='😭'>😭</option>
         <option value='😎'>😎</option>

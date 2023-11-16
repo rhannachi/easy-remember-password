@@ -2,7 +2,7 @@
 
 import {useEffect, useState} from "react";
 
-export function Select({ onSelected }: { onSelected: (value: string) => void }) {
+export const Select = ({ onSelected }: { onSelected: (value: string) => void }) => {
     const [selectedEmoji, setSelectedEmoji] = useState("")
 
     useEffect(() => {

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from "react";
-import Generator from "@/components/Generator";
+import { Generator } from "@/components";
 
 export default function Page() {
 
@@ -9,10 +9,10 @@ export default function Page() {
 
   return (
     <main className="flex min-h-screen flex-col p-24">
-      <div className="">
+      <div className="text-white">
         <h1 className="">Vous en avez assez d`oublier vos mots de passe 😖😖😖</h1>
         <h1 className="mt-2" >Retenez tous vos mots de passe 😃!</h1>
-        <h2>C`est extrêmement facile 😄, générez-les à partir d`une suite d`emojis de votre choix 😎</h2>
+        <p>C`est extrêmement facile 😄, générez-les à partir d`une suite d`emojis de votre choix 😎</p>
       </div>
 
       <div className="flex flex-col mt-5">
@@ -22,7 +22,7 @@ export default function Page() {
       </div>
 
       <div className="mt-5">
-          <button onClick={() => setNb((item)=> item + 1) } > + </button>
+          <button className="text-black" onClick={() => setNb((item)=> item + 1) } > + </button>
       </div>
 
     </main>

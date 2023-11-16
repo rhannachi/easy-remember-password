@@ -2,15 +2,11 @@
 
 import { useState} from "react";
 import { md5 } from 'hash-wasm';
-import { Select } from "@/components";
+import { Select } from "./Select";
 
-export default function Generator() { // { onCreated }: { onCreated: (hash: string | undefined) => void}
+export const Generator = () => {
 
     const [hash, setHash] = useState<string | undefined>(undefined)
-
-    // useEffect(() => {
-    //     onCreated(hash)
-    // }, [hash])
 
     const handleSelectedEmoji = async (emoji: string) => {
         console.log('select:', emoji)

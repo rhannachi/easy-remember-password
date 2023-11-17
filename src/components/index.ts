@@ -1,5 +1,5 @@
 export * from './Select'
 export * from './Selects'
-export * from './Generator'
+export * from './EmojiHash'
 export * from './Tabs'
 export * from './Button'

@@ -13,12 +13,12 @@ const Tab = ({
   onClick: () => void
 }) => {
   return (
-    <li className='me-2 cursor-pointer'>
+    <li className='me-2 cursor-pointer text font-semibold'>
       <span
         onClick={onClick}
         className={clsx(
           'inline-block p-4 rounded-t-lg',
-          isSelected ? 'text-blue-700 border-b-2 border-blue-600' : 'text-white',
+          isSelected ? 'text-white border-b-2 border-white' : 'text-blue-500',
         )}
       >
         {title}
@@ -31,7 +31,7 @@ export const Tabs = () => {
   const [tab, setTab] = useState<'EMOJI' | 'WORD'>('EMOJI')
 
   return (
-    <div className='text-lg font-medium text-center text-white border-gray-200'>
+    <div className='text-center'>
       <ul className='flex flex-wrap -mb-px justify-center'>
         <Tab
           key='emoji'

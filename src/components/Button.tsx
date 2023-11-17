@@ -14,7 +14,7 @@ export const Button = ({
   return (
     <button
       onClick={onClick}
-      className={clsx('rounded-md text-sm text-blue-600 font-semibold bg-white', className)}
+      className={clsx('rounded-md text-sm text-blue-600 bg-white', className)}
     >
       {label}
     </button>

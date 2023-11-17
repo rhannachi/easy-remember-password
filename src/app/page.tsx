@@ -1,7 +1,6 @@
 'use client'
 
 import { EmojiHash, Tabs, WordHash } from '@/components'
-import React, { Fragment } from 'react'
 
 export default function Page() {
   return (

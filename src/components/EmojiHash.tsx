@@ -1,30 +1,74 @@
 'use client'
 
-import { Fragment, useState } from 'react'
-import { md5 } from 'hash-wasm'
+import { ChangeEvent, Fragment, useEffect, useState } from 'react'
 import { Select } from '@/components'
+import { calculateHash, EMOJIS, EmojiType, randomInt } from '@/helpers'
+
+const HASH_LENGTH = 10 as const
+const EMOJIS_LENGTH = 2 as const
+
+type StateType = { emojis: EmojiType[]; hashLength: number; hash: string | undefined }
 
 export const EmojiHash = () => {
-  const [nbSelect, setNbSelect] = useState(2)
-  const [lengthHash, setLengthHash] = useState(8)
-  const [hash, setHash] = useState<string | undefined>(undefined)
+  const [{ emojis, hashLength, hash }, setState] = useState<StateType>({
+    emojis: Array.from({ length: EMOJIS_LENGTH }).map(() => EMOJIS[randomInt(0, EMOJIS.length)]),
+    hashLength: HASH_LENGTH,
+    hash: undefined,
+  })
 
-  const handleSelect = async (emoji: string) => {
-    if (emoji) {
-      const emojiHash = await md5(emoji)
-      setHash(emojiHash)
-    } else {
-      setHash(undefined)
+  // console.log('emojis:', [...emojis])
+  // console.log('', hashLength)
+  // console.log('', hash)
+  // console.log('')
+
+  useEffect(() => {
+    calculateHash(emojis)
+      .then((newHash: string) =>
+        setState((prev) => ({
+          ...prev,
+          hash: newHash,
+        })),
+      )
+      .catch((e) => console.error(e))
+  }, [emojis])
+
+  const handleSelect = (index: number) => (emoji: EmojiType) => {
+    setState((prev) => ({
+      ...prev,
+      emojis: prev.emojis.map((item, i) => {
+        if (index === i) return emoji
+        return item
+      }),
+    }))
+  }
+
+  const handleChangeNbEmoji = (e: ChangeEvent<HTMLInputElement>) => {
+    const newNbEmoji = Number(e.target.value) - emojis.length
+
+    if (newNbEmoji > 0) {
+      const emoji = Array.from({ length: newNbEmoji }).map(
+        () => EMOJIS[randomInt(0, EMOJIS.length)],
+      )
+      setState((prev) => ({
+        ...prev,
+        emojis: prev.emojis.concat(emoji),
+      }))
+    }
+    if (newNbEmoji < 0) {
+      setState((prev) => ({
+        ...prev,
+        emojis: prev.emojis.slice(0, prev.emojis.length + newNbEmoji),
+      }))
     }
   }
 
   return (
     <div className='flex flex-col'>
       <div className='flex flex-row justify-center '>
-        {Array.from({ length: nbSelect }).map((_, index) => (
+        {emojis.map((emoji, index) => (
           <Fragment key={index}>
-            <Select initValue='🙂' onSelected={handleSelect} />
-            {index < nbSelect - 1 && <span className='font-semibold text-white px-1'>+</span>}
+            <Select initValue={emoji} onSelected={handleSelect(index)} />
+            {index < emojis.length - 1 && <span className='font-semibold text-white px-1'>+</span>}
           </Fragment>
         ))}
       </div>
@@ -35,7 +79,7 @@ export const EmojiHash = () => {
           {hash && (
             <>
               <div className='text-center font-semibold text-blue-800 w-full'>
-                {hash.slice(0, lengthHash)}
+                {hash.slice(0, hashLength)}
               </div>
               <div className='absolute cursor-pointer'>📋</div>
             </>
@@ -51,23 +95,28 @@ export const EmojiHash = () => {
           <input type='checkbox' />
         </div>
         <div className='flex flex-row'>
-          <label className='text-sm text-white mr-2'>Longueur ({lengthHash}):</label>
+          <label className='text-sm text-white mr-2'>Longueur ({hashLength}):</label>
           <input
             min={6}
             max={20}
-            value={lengthHash}
+            value={hashLength}
             type='range'
-            onChange={(e) => setLengthHash(Number(e.target.value))}
+            onChange={(e) =>
+              setState((prev) => ({
+                ...prev,
+                hashLength: Number(e.target.value),
+              }))
+            }
           />
         </div>
         <div className='flex flex-row'>
-          <label className='text-sm text-white mr-2'>Emojis ({nbSelect}):</label>
+          <label className='text-sm text-white mr-2'>Emojis ({emojis.length}):</label>
           <input
             min={1}
             max={3}
-            value={nbSelect}
+            value={emojis.length}
             type='range'
-            onChange={(e) => setNbSelect(Number(e.target.value))}
+            onChange={handleChangeNbEmoji}
           />
         </div>
       </div>

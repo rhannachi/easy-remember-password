@@ -1,15 +1,16 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { EMOJIS, EmojiType } from '@/helpers'
 
 export const Select = ({
-  initValue = '',
+  initValue,
   onSelected,
 }: {
-  initValue?: string
-  onSelected: (value: string) => void
+  initValue: EmojiType
+  onSelected: (value: EmojiType) => void
 }) => {
-  const [selectedEmoji, setSelectedEmoji] = useState(initValue)
+  const [selectedEmoji, setSelectedEmoji] = useState<EmojiType>(initValue)
 
   useEffect(() => {
     onSelected(selectedEmoji)
@@ -20,21 +21,17 @@ export const Select = ({
       <select
         className='rounded text-blue-600 w-11 '
         value={selectedEmoji}
-        onChange={(e) => setSelectedEmoji(e.target.value)}
+        onChange={(e) => {
+          setSelectedEmoji(e.target.value as EmojiType)
+        }}
         name='emoji'
         id='emoji-select'
       >
-        <option value=''></option>
-        <option value='🤬'>🤬</option>
-        <option value='😭'>😭</option>
-        <option value='😎'>😎</option>
-        <option value='🥵'>🥵</option>
-        <option value='🥶'>🥶</option>
-        <option value='🙂'>🙂</option>
-        <option value='🙃'>🙃</option>
-        <option value='😬'>😬</option>
-        <option value='😶'>😶</option>
-        <option value='😄'>😄</option>
+        {EMOJIS.map((emoji) => (
+          <option key={emoji} value={emoji}>
+            {emoji}
+          </option>
+        ))}
       </select>
     </label>
   )

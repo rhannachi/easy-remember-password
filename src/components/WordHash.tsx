@@ -8,9 +8,6 @@ export const WordHash = () => {
   const [lengthHash, setLengthHash] = useState(8)
   const [hash, setHash] = useState<string | undefined>(undefined)
 
-  console.log('word', word)
-  console.log('hash', hash)
-
   const handleInput = async (e: ChangeEvent<HTMLInputElement>) => {
     setWord(e.target.value)
     const emojiHash = await md5(e.target.value)

@@ -1,5 +1,6 @@
 export * from './Select'
 export * from './Selects'
 export * from './EmojiHash'
+export * from './WordHash'
 export * from './Tabs'
 export * from './Button'

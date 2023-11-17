@@ -1,6 +1,7 @@
 'use client'
 
-import { EmojiHash, Tabs } from '@/components'
+import { EmojiHash, Tabs, WordHash } from '@/components'
+import React, { Fragment } from 'react'
 
 export default function Page() {
   return (
@@ -16,10 +17,10 @@ export default function Page() {
       </div>
 
       <div className='flex flex-col mt-10 bg-cyan-400 px-10 pt-0 pb-10 rounded-lg '>
-        <Tabs />
-        <div className='mt-10'>
+        <Tabs>
           <EmojiHash />
-        </div>
+          <WordHash />
+        </Tabs>
       </div>
     </main>
   )

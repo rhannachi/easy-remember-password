@@ -6,8 +6,10 @@ import { EMOJIS, EmojiType } from '@/helpers'
 export const Select = ({
   initValue,
   onSelected,
+  name,
 }: {
   initValue: EmojiType
+  name: string
   onSelected: (value: EmojiType) => void
 }) => {
   const [selectedEmoji, setSelectedEmoji] = useState<EmojiType>(initValue)
@@ -17,15 +19,15 @@ export const Select = ({
   }, [selectedEmoji])
 
   return (
-    <label htmlFor='emoji-select'>
+    <label htmlFor={`id-${name}`}>
       <select
-        className='rounded text-blue-600 w-11 '
+        className='rounded text-gray-600 text-1xl '
         value={selectedEmoji}
         onChange={(e) => {
           setSelectedEmoji(e.target.value as EmojiType)
         }}
-        name='emoji'
-        id='emoji-select'
+        name={name}
+        id={`id-${name}`}
       >
         {EMOJIS.map((emoji) => (
           <option key={emoji} value={emoji}>

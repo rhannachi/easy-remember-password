@@ -1,8 +1,9 @@
 'use client'
 
 import { ChangeEvent, Fragment, useEffect, useState } from 'react'
-import { Select } from '@/components'
+import { Checkbox, Output, Select, Settings } from '@/components'
 import { calculateHash, EMOJIS, EmojiType, randomInt } from '@/helpers'
+import { Input } from '@/components/Input'
 
 const HASH_LENGTH = 10 as const
 const EMOJIS_LENGTH = 2 as const
@@ -15,11 +16,6 @@ export const EmojiHash = () => {
     hashLength: HASH_LENGTH,
     hash: undefined,
   })
-
-  // console.log('emojis:', [...emojis])
-  // console.log('', hashLength)
-  // console.log('', hash)
-  // console.log('')
 
   useEffect(() => {
     calculateHash(emojis)
@@ -63,63 +59,44 @@ export const EmojiHash = () => {
   }
 
   return (
-    <div className='flex flex-col'>
+    <>
       <div className='flex flex-row justify-center '>
         {emojis.map((emoji, index) => (
           <Fragment key={index}>
-            <Select initValue={emoji} onSelected={handleSelect(index)} />
-            {index < emojis.length - 1 && <span className='font-semibold text-white px-1'>+</span>}
+            <Select name={`${emoji}-${index}`} initValue={emoji} onSelected={handleSelect(index)} />
+            {index < emojis.length - 1 && (
+              <span className='font-semibold text-xl text-blue-600 px-1'>+</span>
+            )}
           </Fragment>
         ))}
       </div>
 
       <div className='flex flex-col items-center '>
-        <span className='font-semibold text-xl text-white py-1 rotate-90 '>➤</span>
-        <div className='flex flex-row bg-white px-2 w-64 justify-end'>
-          {hash && (
-            <>
-              <div className='text-center font-semibold text-blue-800 w-full'>
-                {hash.slice(0, hashLength)}
-              </div>
-              <div className='absolute cursor-pointer'>📋</div>
-            </>
-          )}
-        </div>
+        <span className='font-semibold text-xl text-blue-600 my-1 rotate-90 '>➤</span>
+        <Output label={hash ? hash.slice(0, hashLength) : '???'} />
       </div>
 
-      {/* ----------------*/}
-
-      <div className='flex flex-col mt-10 '>
-        <div className='flex flex-row'>
-          <label className='text-sm text-white mr-2'>Majuscule:</label>
-          <input type='checkbox' />
-        </div>
-        <div className='flex flex-row'>
-          <label className='text-sm text-white mr-2'>Longueur ({hashLength}):</label>
-          <input
-            min={6}
-            max={20}
-            value={hashLength}
-            type='range'
-            onChange={(e) =>
-              setState((prev) => ({
-                ...prev,
-                hashLength: Number(e.target.value),
-              }))
-            }
-          />
-        </div>
-        <div className='flex flex-row'>
-          <label className='text-sm text-white mr-2'>Emojis ({emojis.length}):</label>
-          <input
-            min={1}
-            max={3}
-            value={emojis.length}
-            type='range'
-            onChange={handleChangeNbEmoji}
-          />
-        </div>
-      </div>
-    </div>
+      <Settings>
+        <Checkbox label={<div className='w-19'>Uppercase:</div>} />
+        <Input
+          value={hashLength}
+          label={<div className='w-19'>Length ({hashLength}):</div>}
+          className='my-1'
+          onChange={(e) =>
+            setState((prev) => ({
+              ...prev,
+              hashLength: Number(e.target.value),
+            }))
+          }
+        />
+        <Input
+          value={emojis.length}
+          label={<div className='w-19'>Emojis ({emojis.length}):</div>}
+          min={1}
+          max={3}
+          onChange={handleChangeNbEmoji}
+        />
+      </Settings>
+    </>
   )
 }

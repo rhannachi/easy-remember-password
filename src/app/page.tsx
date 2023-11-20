@@ -4,18 +4,18 @@ import { EmojiHash, Tabs, WordHash } from '@/components'
 
 export default function Page() {
   return (
-    <main className='flex min-h-screen flex-col py-32 px-20 lg:px-72 '>
-      <div className='flex flex-col items-center text-white'>
-        <h1 className='font-semibold text-center lg:text-4xl'>
-          Vous en avez assez d`oublier vos mots de passe 😖
-        </h1>
-        <h1 className='font-semibold mt-2 lg:text-3xl'> Retenez tous vos mots de passe 😃</h1>
-        <h2 className='mt-10'>
-          C`est extrêmement facile 😄, générez-les à partir d`une suite d`emojis de votre choix 😎
-        </h2>
-      </div>
+    <main className='flex flex-col items-center pt-10 lg:pt-20 px-5 md:px-44 lg:px-64 xl:px-96 '>
+      <div className='container'>
+        <div className='flex flex-col items-center text-white'>
+          <h1 className='font-semibold text-center text-3xl md:text-4xl lg:text-5xl lg:leading-snug '>
+            Are you tired 😖 of <span className='line-through'>forgetting</span> your passwords *️⃣ ?
+          </h1>
+          <p className='mt-10 text-justify '>
+            Generate your password using a <span className='font-bold'>simple word ✍️</span> and
+            <span className='font-bold'> emojis 😃</span> of your choice 😎
+          </p>
+        </div>
 
-      <div className='flex flex-col mt-10 bg-cyan-400 px-10 pt-0 pb-10 rounded-lg '>
         <Tabs>
           <EmojiHash />
           <WordHash />

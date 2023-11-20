@@ -2,10 +2,12 @@
 
 import { ChangeEvent, useState } from 'react'
 import { md5 } from 'hash-wasm'
+import { Checkbox, Settings, Output } from '@/components'
+import { Input } from '@/components/Input'
 
 export const WordHash = () => {
   const [word, setWord] = useState('')
-  const [lengthHash, setLengthHash] = useState(8)
+  const [hashLength, setLengthHash] = useState(8)
   const [hash, setHash] = useState<string | undefined>(undefined)
 
   const handleInput = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -15,46 +17,31 @@ export const WordHash = () => {
   }
 
   return (
-    <div className='flex flex-col'>
+    <>
       <div className='flex flex-row justify-center '>
         <input
           value={word}
           onChange={handleInput}
-          placeholder='Tapez votre phrase'
-          className=' text-center rounded p-2 text-md text-blue-600 h-10 '
+          placeholder='Your seed ...'
+          className='shadow-sm border-b-2 border-blue-600 text-md appearance-none rounded text-center w-full pb-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
           type='text'
           maxLength={20}
         />
       </div>
-
-      <div className='flex flex-col items-center '>
-        <span className='font-semibold text-xl text-white py-1 rotate-90 '>➤</span>
-        <div className='flex flex-row bg-white px-2 w-64 justify-end'>
-          <div className='text-center font-semibold text-blue-800 w-full'>
-            {word && hash ? hash.slice(0, lengthHash) : '???'}
-          </div>
-          {word && <div className='absolute cursor-pointer'>📋</div>}
-        </div>
+      <div className='flex flex-col items-center  '>
+        <span className='font-semibold text-xl text-blue-600 my-1 rotate-90 '>➤</span>
+        <Output label={word && hash ? hash.slice(0, hashLength) : '???'} />
       </div>
 
-      {/* ----------------*/}
-
-      <div className='flex flex-col mt-10'>
-        <div className='flex flex-row '>
-          <label className='text-sm text-white mr-2'>Majuscule:</label>
-          <input type='checkbox' />
-        </div>
-        <div className='flex flex-row '>
-          <label className='text-sm text-white mr-2'>Characters ({lengthHash}):</label>
-          <input
-            min={6}
-            max={20}
-            value={lengthHash}
-            type='range'
-            onChange={(e) => setLengthHash(Number(e.target.value))}
-          />
-        </div>
-      </div>
-    </div>
+      <Settings>
+        <Checkbox label={<div className='w-19'>Uppercase:</div>} />
+        <Input
+          value={hashLength}
+          label={<div className='w-19'>Length ({hashLength}):</div>}
+          className='mt-1'
+          onChange={(e) => setLengthHash(Number(e.target.value))}
+        />
+      </Settings>
+    </>
   )
 }

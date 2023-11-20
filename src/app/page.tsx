@@ -4,7 +4,7 @@ import { EmojiHash, Tabs, WordHash } from '@/components'
 
 export default function Page() {
   return (
-    <main className='flex flex-col items-center pt-10 lg:pt-20 px-5 md:px-44 lg:px-64 xl:px-96 '>
+    <main className='flex flex-col items-center py-10 md:pt-10 lg:pt-20 px-5 md:px-44 lg:px-64 xl:px-96 '>
       <div className='container'>
         <div className='flex flex-col items-center text-white'>
           <h1 className='font-semibold text-center text-3xl md:text-4xl lg:text-5xl lg:leading-snug '>

@@ -1,7 +1,7 @@
 'use client'
 
 import { ChangeEvent, useState } from 'react'
-import { md5 } from 'hash-wasm'
+import { sha1 } from 'hash-wasm'
 import { Checkbox, Settings, Output } from '@/components'
 import { Input } from '@/components/Input'
 
@@ -12,7 +12,7 @@ export const WordHash = () => {
 
   const handleInput = async (e: ChangeEvent<HTMLInputElement>) => {
     setWord(e.target.value)
-    const emojiHash = await md5(e.target.value)
+    const emojiHash = await sha1(e.target.value)
     setHash(emojiHash)
   }
 

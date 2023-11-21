@@ -1,10 +1,9 @@
-'use client'
-
 import clsx from 'clsx'
 import { ChangeEvent } from 'react'
 
 export const Input = ({
   label,
+  name,
   value,
   min = 6,
   max = 20,
@@ -12,6 +11,7 @@ export const Input = ({
   className,
 }: {
   label: string | JSX.Element
+  name: string
   value: number
   min?: number
   max?: number
@@ -20,8 +20,11 @@ export const Input = ({
 }) => {
   return (
     <div className={clsx('flex flex-row items-center', className)}>
-      <label className='text-xs font-medium text-gray-600'>{label}</label>
+      <label htmlFor={name} className='text-xs font-medium text-gray-600'>
+        {label}
+      </label>
       <input
+        id={name}
         className='w-full h-2 rounded bg-gray-200 appearance-none'
         min={min}
         max={max}

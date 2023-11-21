@@ -1,5 +1,3 @@
-'use client'
-
 import { useState } from 'react'
 
 export const Output = ({ label }: { label: string }) => {
@@ -21,8 +19,8 @@ export const Output = ({ label }: { label: string }) => {
           setIsCopied(false)
         }, 3500)
       })
-      .catch((err) => {
-        console.log(err)
+      .catch((e) => {
+        console.error(`${e}`)
       })
   }
 

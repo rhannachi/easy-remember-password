@@ -1,5 +1,3 @@
-'use client'
-
 import { useEffect, useState } from 'react'
 import { EMOJIS, EmojiType } from '@/helpers'
 

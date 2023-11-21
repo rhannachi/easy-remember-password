@@ -1,6 +1,17 @@
 'use client'
 
-import { EmojiHash, Tabs, WordHash } from '@/components'
+import dynamic from 'next/dynamic'
+import { Tabs, Loader } from '@/components'
+
+const EmojiHash = dynamic(() => import('../components/EmojiHash'), {
+  ssr: false,
+  loading: () => <Loader />,
+})
+
+const WordHash = dynamic(() => import('../components/WordHash'), {
+  ssr: false,
+  loading: () => <Loader />,
+})
 
 export default function Page() {
   return (

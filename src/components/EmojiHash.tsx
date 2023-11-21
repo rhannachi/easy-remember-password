@@ -1,18 +1,17 @@
-'use client'
-
 import { ChangeEvent, Fragment, useEffect, useState } from 'react'
-import { Checkbox, Output, Select, Settings } from '@/components'
+import { Input, Checkbox, Output, Select, Settings } from '@/components'
 import { calculateHash, EMOJIS, EmojiType, randomInt } from '@/helpers'
-import { Input } from '@/components/Input'
 
 const HASH_LENGTH = 10 as const
 const EMOJIS_LENGTH = 2 as const
 
 type StateType = { emojis: EmojiType[]; hashLength: number; hash: string | undefined }
 
-export const EmojiHash = () => {
+const EmojiHash = () => {
   const [{ emojis, hashLength, hash }, setState] = useState<StateType>({
-    emojis: Array.from({ length: EMOJIS_LENGTH }).map(() => EMOJIS[randomInt(0, EMOJIS.length)]),
+    emojis: Array.from({ length: EMOJIS_LENGTH }).map(
+      () => EMOJIS[randomInt(0, EMOJIS_LENGTH - 1)],
+    ),
     hashLength: HASH_LENGTH,
     hash: undefined,
   })
@@ -77,8 +76,9 @@ export const EmojiHash = () => {
       </div>
 
       <Settings>
-        <Checkbox label={<div className='w-19'>Uppercase:</div>} />
+        <Checkbox name='uppercase' checked={false} label={<div className='w-19'>Uppercase:</div>} />
         <Input
+          name='length-e'
           value={hashLength}
           label={<div className='w-19'>Length ({hashLength}):</div>}
           className='my-1'
@@ -90,6 +90,7 @@ export const EmojiHash = () => {
           }
         />
         <Input
+          name='emojis-e'
           value={emojis.length}
           label={<div className='w-19'>Emojis ({emojis.length}):</div>}
           min={1}
@@ -100,3 +101,5 @@ export const EmojiHash = () => {
     </>
   )
 }
+
+export default EmojiHash

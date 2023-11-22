@@ -1,9 +1,10 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { bcrypt, BcryptOptions } from 'hash-wasm'
 import { Checkbox, Settings, Output, Input } from '@/components'
+import { hashTransform, PASSWORDS, randomInt } from '@/helpers'
 
 type WordHashType = {
-  word: string
+  password: string
   hashOptions: Omit<BcryptOptions, 'password'>
   hash: string | undefined
   length: number
@@ -17,36 +18,10 @@ const BCRYPT_DEFAULT_OPTIONS: Readonly<Omit<BcryptOptions, 'password'>> = {
   outputType: 'encoded',
 }
 
-const hashTransform = ({
-  hash,
-  length,
-  hasSymbol,
-  hasUppercase,
-}: {
-  length: number
-  hash: string
-  hasUppercase: boolean
-  hasSymbol: boolean
-}) => {
-  try {
-    let newHash = hash.split('').reverse().join('')
-    if (!hasUppercase) {
-      newHash = newHash.replace(/[A-Z]/g, '')
-    }
-    if (!hasSymbol) {
-      newHash = newHash.replace(/[^a-zA-Z0-9]/g, '')
-    }
-    return newHash.slice(0, length)
-  } catch (e) {
-    console.error(`${e}`)
-  }
-  return hash
-}
-
-const WordHash = () => {
-  const [{ word, hashOptions, hash, length, hasSymbol, hasUppercase }, setState] =
+export const WordHash = () => {
+  const [{ password, hashOptions, hash, length, hasSymbol, hasUppercase }, setState] =
     useState<WordHashType>({
-      word: '',
+      password: '',
       hashOptions: BCRYPT_DEFAULT_OPTIONS,
       hash: undefined,
       length: 10,
@@ -54,23 +29,38 @@ const WordHash = () => {
       hasUppercase: true,
     })
 
-  const handleInput = async (e: ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    ;(async function () {
+      const newPassword = PASSWORDS[randomInt(0, PASSWORDS.length - 1)]
+      const newHash = await bcrypt({
+        password: newPassword,
+        ...hashOptions,
+      })
+      setState((prevState) => ({
+        ...prevState,
+        password: newPassword,
+        hash: newHash,
+      }))
+    })()
+  }, [])
+
+  const handleOnChange = async (e: ChangeEvent<HTMLInputElement>) => {
     try {
-      const newWord = e.target.value
-      if (newWord.length) {
+      const newPassword = e.target.value
+      if (newPassword.length) {
         const newHash = await bcrypt({
-          password: newWord,
+          password: newPassword,
           ...hashOptions,
         })
         setState((prevState) => ({
           ...prevState,
-          word: newWord,
+          password: newPassword,
           hash: newHash,
         }))
       } else {
         setState((prevState) => ({
           ...prevState,
-          word: newWord,
+          password: newPassword,
         }))
       }
     } catch (e) {
@@ -81,20 +71,27 @@ const WordHash = () => {
   return (
     <>
       <div className='flex flex-row justify-center '>
-        <input
-          name='seed'
-          value={word}
-          onChange={handleInput}
-          placeholder='Your seed ...'
-          className='shadow-sm border-b-2 border-blue-600 text-md appearance-none rounded text-center w-full pb-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-          type='text'
-          maxLength={20}
-        />
+        <label
+          htmlFor='password-input'
+          className='shadow-sm border-2 border-blue-600 text-md appearance-none rounded w-full py-2 px-3 text-gray-700'
+        >
+          <input
+            id='password-input'
+            value={password}
+            onChange={handleOnChange}
+            placeholder='Your seed ...'
+            className='w-full text-center focus:outline-none focus:shadow-outline'
+            type='text'
+            maxLength={20}
+          />
+        </label>
       </div>
       <div className='flex flex-col items-center  '>
         <span className='font-semibold text-xl text-blue-600 my-1 rotate-90 '>➤</span>
         <Output
-          label={word && hash ? hashTransform({ hash, length, hasSymbol, hasUppercase }) : '???'}
+          label={
+            password && hash ? hashTransform({ hash, length, hasSymbol, hasUppercase }) : '???'
+          }
         />
       </div>
 
@@ -149,5 +146,3 @@ const WordHash = () => {
     </>
   )
 }
-
-export default WordHash

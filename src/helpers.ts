@@ -1,16 +1,13 @@
-import { md5, sha1, sha224, sha256, sha3 } from 'hash-wasm'
-
-export const EMOJIS = ['🤬', '😭', '😎', '🥵', '🥶'] as const
-export type EmojiType = (typeof EMOJIS)[number]
-
-const EMOJIS_HASH_FN: Readonly<Record<EmojiType, (data: string) => Promise<string>>> =
-  Object.freeze({
-    '🤬': md5,
-    '😭': sha1,
-    '😎': sha3,
-    '🥵': sha224,
-    '🥶': sha256,
-  })
+export const PASSWORDS = [
+  'Facebook 😎',
+  'Linkedin 🎯',
+  'Gmail 🖥️',
+  'Tinder 🍑',
+  'Instagram ❤️',
+  'Gmail 🕹️',
+  'Gmail 👨‍👩‍👦',
+  'tiktok 🎬',
+] as const
 
 export const randomInt = (min: number, max: number) => {
   min = Math.ceil(min)
@@ -18,21 +15,28 @@ export const randomInt = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-export const calculateHash = async (emojis: EmojiType[]): Promise<string> => {
+export const hashTransform = ({
+  hash,
+  length,
+  hasSymbol,
+  hasUppercase,
+}: {
+  length: number
+  hash: string
+  hasUppercase: boolean
+  hasSymbol: boolean
+}) => {
   try {
-    const newHash = await emojis.reduce(async (accum: Promise<string>, emoji: EmojiType) => {
-      const newAccum = await accum
-      const hashFn = EMOJIS_HASH_FN[emoji]
-      if (typeof hashFn === 'function') {
-        if (newAccum === '') {
-          return await hashFn(emoji)
-        }
-        return await hashFn(newAccum)
-      }
-      return newAccum
-    }, Promise.resolve(''))
-    return Promise.resolve(newHash)
+    let newHash = hash.split('').reverse().join('')
+    if (!hasUppercase) {
+      newHash = newHash.replace(/[A-Z]/g, '')
+    }
+    if (!hasSymbol) {
+      newHash = newHash.replace(/[^a-zA-Z0-9]/g, '')
+    }
+    return newHash.slice(0, length)
   } catch (e) {
-    throw Error(`${e}`)
+    console.error(`${e}`)
   }
+  return hash
 }

@@ -13,6 +13,9 @@ export const metadata: Metadata = {
     name: 'Ramzi HANNACHI',
     url: 'https://github.com/rhannachi',
   },
+  verification: {
+    google: 'OrNATZOfBihihC6heKex1V59W6pB-6onIt5anbcZc4M',
+  },
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {

@@ -1,7 +1,10 @@
 {
-  "name": "memmo-pass-generator",
-  "version": "0.1.0",
-  "private": true,
+  "name": "easy-to-remember-password",
+  "version": "2.0.1",
+  "license": "MIT",
+  "homepage": "https://rhannachi.github.io/easy-to-remember-password",
+  "repository": "https://github.com/rhannachi/easy-to-remember-password.git",
+  "description": "Generating your password with easy-to-remember words and emojis",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

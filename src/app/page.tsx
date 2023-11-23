@@ -8,8 +8,9 @@ export default function Page() {
       <div className='container'>
         <div className='flex flex-col items-center text-white'>
           <h1 className='font-semibold text-center text-3xl md:text-4xl lg:text-5xl lg:leading-snug'>
-            Easy to remember password *️⃣
+            Easy to remember and generate your password
           </h1>
+          <span>*️⃣</span>
           <h2 className=' text-xl text-center mt-10'>
             Are you tired 😖 of <span className='line-through'>forgetting</span> your passwords ?
           </h2>

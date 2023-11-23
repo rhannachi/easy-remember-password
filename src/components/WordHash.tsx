@@ -24,7 +24,7 @@ export const WordHash = () => {
       password: '',
       hashOptions: BCRYPT_DEFAULT_OPTIONS,
       hash: undefined,
-      length: 10,
+      length: 15,
       hasSymbol: true,
       hasUppercase: true,
     })
@@ -95,7 +95,7 @@ export const WordHash = () => {
         />
       </div>
 
-      <Settings>
+      <div className='flex flex-col mt-4'>
         <div className='flex flex-row '>
           <Checkbox name='abc-w' className='basis-1/4' checked={true} label='abc' disabled />
           <Checkbox
@@ -133,8 +133,12 @@ export const WordHash = () => {
         <Input
           value={length}
           name='length-w'
-          label={<div className='w-19'>Length ({length}):</div>}
-          className='mt-1'
+          label={
+            <div className='w-19'>
+              Length (<span className='text-blue-600'>{length}</span>):
+            </div>
+          }
+          className='mt-2'
           onChange={(e) =>
             setState((prevState) => ({
               ...prevState,
@@ -142,7 +146,7 @@ export const WordHash = () => {
             }))
           }
         />
-      </Settings>
+      </div>
     </>
   )
 }

@@ -20,11 +20,7 @@ export default function Page() {
           </h3>
         </div>
 
-        <div className='flex flex-col mt-10 bg-white rounded-lg 2xl:mx-52'>
-          <div className='flex flex-col mt-5 px-5 pb-5'>
-            <WordHash />
-          </div>
-        </div>
+        <WordHash />
       </div>
     </main>
   )

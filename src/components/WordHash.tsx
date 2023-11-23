@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { bcrypt, BcryptOptions } from 'hash-wasm'
-import { Checkbox, Output, Range } from '@/components'
+import { Checkbox, Input, Output, Range } from '@/components'
 import { BCRYPT_DEFAULT_OPTIONS, hashTransform, PASSWORDS, randomInt } from '@/helpers'
 
 type WordHashType = {
@@ -64,23 +64,14 @@ const WordHash = () => {
   )
 
   return (
-    <>
-      <div className='flex flex-row justify-center'>
-        <label
-          htmlFor='password-input'
-          className='bg-gray-50 border-2 border-blue-600 text-md rounded w-full py-2 px-3 text-gray-700'
-        >
-          <input
-            id='password-input'
-            value={password}
-            onChange={handleOnChange}
-            placeholder='Your simple pass ...'
-            className='w-full text-center bg-gray-50 focus:outline-none focus:shadow-outline'
-            type='text'
-            maxLength={20}
-          />
-        </label>
-      </div>
+    <div className='flex flex-col mt-10 p-5 bg-white rounded-lg 2xl:mx-52'>
+      <Input
+        value={password}
+        maxLength={20}
+        name='password-input'
+        placeholder='Your simple pass ...'
+        onChange={handleOnChange}
+      />
       <div className='flex flex-col items-center  '>
         <span className='font-semibold text-xl text-blue-600 my-1 rotate-90 '>➤</span>
         <Output label={hashTransformMemo} />
@@ -138,7 +129,7 @@ const WordHash = () => {
           }
         />
       </div>
-    </>
+    </div>
   )
 }
 

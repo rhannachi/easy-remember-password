@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 
-export const Checkbox = ({
+const Checkbox = ({
   label,
   name,
   checked,
@@ -34,3 +34,5 @@ export const Checkbox = ({
     </div>
   )
 }
+
+export default Checkbox

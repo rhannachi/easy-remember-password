@@ -12,7 +12,7 @@ type WordHashType = {
   hasSymbol: boolean
 }
 
-export const WordHash = () => {
+const WordHash = () => {
   const [{ password, hashOptions, hash, length, hasSymbol, hasUppercase }, setState] =
     useState<WordHashType>({
       password: '',
@@ -65,17 +65,17 @@ export const WordHash = () => {
 
   return (
     <>
-      <div className='flex flex-row justify-center '>
+      <div className='flex flex-row justify-center'>
         <label
           htmlFor='password-input'
-          className='shadow-sm border-2 border-blue-600 text-md appearance-none rounded w-full py-2 px-3 text-gray-700'
+          className='bg-gray-50 border-2 border-blue-600 text-md rounded w-full py-2 px-3 text-gray-700'
         >
           <input
             id='password-input'
             value={password}
             onChange={handleOnChange}
-            placeholder='Your seed ...'
-            className='w-full text-center focus:outline-none focus:shadow-outline'
+            placeholder='Your simple pass ...'
+            className='w-full text-center bg-gray-50 focus:outline-none focus:shadow-outline'
             type='text'
             maxLength={20}
           />
@@ -141,3 +141,5 @@ export const WordHash = () => {
     </>
   )
 }
+
+export default WordHash

@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { ChangeEvent } from 'react'
 
-export const Range = ({
+const Range = ({
   label,
   name,
   value,
@@ -35,3 +35,5 @@ export const Range = ({
     </div>
   )
 }
+
+export default Range

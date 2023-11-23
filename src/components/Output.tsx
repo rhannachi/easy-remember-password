@@ -32,7 +32,7 @@ const Output = ({ label }: { label: string }) => {
           📋
         </div>
       </div>
-      <span className='text-sm text-green-600 '>{isCopied && 'Copied !'}</span>
+      <div className='text-sm text-green-600 h-3'>{isCopied && 'Copied !'}</div>
     </>
   )
 }

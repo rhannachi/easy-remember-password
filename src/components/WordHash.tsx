@@ -72,7 +72,8 @@ const WordHash = () => {
         placeholder='Your simple pass ...'
         onChange={handleOnChange}
       />
-      <div className='flex flex-col items-center  '>
+
+      <div className='flex flex-col items-center'>
         <span className='font-semibold text-xl text-blue-600 my-1 rotate-90 '>➤</span>
         <Output label={hashTransformMemo} />
       </div>

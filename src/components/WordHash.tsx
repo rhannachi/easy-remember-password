@@ -64,7 +64,7 @@ const WordHash = () => {
   )
 
   return (
-    <div className='flex flex-col mt-10 p-5 bg-white rounded-lg 2xl:mx-52'>
+    <form className='flex flex-col mt-10 p-5 bg-white rounded-lg 2xl:mx-52'>
       <Input
         value={password}
         maxLength={20}
@@ -80,16 +80,22 @@ const WordHash = () => {
 
       <div className='flex flex-col mt-4'>
         <div className='flex flex-row '>
-          <Checkbox name='abc-w' className='basis-1/4' checked={true} label='abc' disabled />
           <Checkbox
-            name='123-w'
+            name='password-contains-lowercase'
+            className='basis-1/4'
+            checked={true}
+            label='abc'
+            disabled
+          />
+          <Checkbox
+            name='password-contains-numeric'
             className='basis-1/4 justify-center'
             checked={true}
             label='123'
             disabled
           />
           <Checkbox
-            name='ABC-w'
+            name='password-contains-uppercase'
             className='basis-1/4 justify-center'
             checked={hasUppercase}
             onChange={(value) =>
@@ -101,7 +107,7 @@ const WordHash = () => {
             label='ABC'
           />
           <Checkbox
-            name='#$&-w'
+            name='password-contains-special-character'
             className='basis-1/4 justify-end'
             onChange={(value) =>
               setState((prevState) => ({
@@ -115,7 +121,7 @@ const WordHash = () => {
         </div>
         <Range
           value={length}
-          name='length-w'
+          name='password-length'
           label={
             <div className='w-19'>
               Length (<span className='text-blue-600'>{length}</span>):
@@ -130,7 +136,7 @@ const WordHash = () => {
           }
         />
       </div>
-    </div>
+    </form>
   )
 }
 

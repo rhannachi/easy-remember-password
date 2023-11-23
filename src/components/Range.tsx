@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { ChangeEvent } from 'react'
 
-export const Input = ({
+export const Range = ({
   label,
   name,
   value,

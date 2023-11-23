@@ -1,21 +1,15 @@
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { bcrypt, BcryptOptions } from 'hash-wasm'
-import { Checkbox, Settings, Output, Input } from '@/components'
-import { hashTransform, PASSWORDS, randomInt } from '@/helpers'
+import { Checkbox, Output, Range } from '@/components'
+import { BCRYPT_DEFAULT_OPTIONS, hashTransform, PASSWORDS, randomInt } from '@/helpers'
 
 type WordHashType = {
   password: string
   hashOptions: Omit<BcryptOptions, 'password'>
-  hash: string | undefined
+  hash: string
   length: number
   hasUppercase: boolean
   hasSymbol: boolean
-}
-
-const BCRYPT_DEFAULT_OPTIONS: Readonly<Omit<BcryptOptions, 'password'>> = {
-  salt: new Uint8Array([154, 224, 224, 142, 215, 205, 89, 168, 98, 54, 120, 67, 241, 27, 150, 154]),
-  costFactor: 4,
-  outputType: 'encoded',
 }
 
 export const WordHash = () => {
@@ -23,7 +17,7 @@ export const WordHash = () => {
     useState<WordHashType>({
       password: '',
       hashOptions: BCRYPT_DEFAULT_OPTIONS,
-      hash: undefined,
+      hash: '',
       length: 15,
       hasSymbol: true,
       hasUppercase: true,
@@ -47,26 +41,27 @@ export const WordHash = () => {
   const handleOnChange = async (e: ChangeEvent<HTMLInputElement>) => {
     try {
       const newPassword = e.target.value
+      let newHash = ''
       if (newPassword.length) {
-        const newHash = await bcrypt({
+        newHash = await bcrypt({
           password: newPassword,
           ...hashOptions,
         })
-        setState((prevState) => ({
-          ...prevState,
-          password: newPassword,
-          hash: newHash,
-        }))
-      } else {
-        setState((prevState) => ({
-          ...prevState,
-          password: newPassword,
-        }))
       }
+      setState((prevState) => ({
+        ...prevState,
+        password: newPassword,
+        hash: newHash,
+      }))
     } catch (e) {
       console.error(`${e}`)
     }
   }
+
+  const hashTransformMemo = useMemo(
+    () => hashTransform({ hash, length, hasSymbol, hasUppercase }),
+    [hash, length, hasSymbol, hasUppercase],
+  )
 
   return (
     <>
@@ -88,11 +83,7 @@ export const WordHash = () => {
       </div>
       <div className='flex flex-col items-center  '>
         <span className='font-semibold text-xl text-blue-600 my-1 rotate-90 '>➤</span>
-        <Output
-          label={
-            password && hash ? hashTransform({ hash, length, hasSymbol, hasUppercase }) : '???'
-          }
-        />
+        <Output label={hashTransformMemo} />
       </div>
 
       <div className='flex flex-col mt-4'>
@@ -130,7 +121,7 @@ export const WordHash = () => {
             label='#$&'
           />
         </div>
-        <Input
+        <Range
           value={length}
           name='length-w'
           label={

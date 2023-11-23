@@ -1,6 +1,4 @@
 export * from './WordHash'
 export * from './Output'
-export * from './Input'
+export * from './Range'
 export * from './Checkbox'
-export * from './Settings'
-export * from './Loader'

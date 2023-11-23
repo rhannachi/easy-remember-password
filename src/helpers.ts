@@ -1,3 +1,11 @@
+import { BcryptOptions } from 'hash-wasm'
+
+export const BCRYPT_DEFAULT_OPTIONS: Readonly<Omit<BcryptOptions, 'password'>> = {
+  salt: new Uint8Array([154, 224, 224, 142, 215, 205, 89, 168, 98, 54, 120, 67, 241, 27, 150, 154]),
+  costFactor: 4,
+  outputType: 'encoded',
+}
+
 export const PASSWORDS = [
   'Facebook 😎',
   'Linkedin 🎯',

@@ -1,4 +1,4 @@
-import { bcrypt, BcryptOptions, blake2b } from 'hash-wasm'
+import { bcrypt, blake2b, BcryptOptions } from 'hash-wasm'
 
 const BCRYPT_DEFAULT_OPTIONS: Readonly<Omit<BcryptOptions, 'password' | 'salt'>> = {
   costFactor: 4,

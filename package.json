@@ -13,7 +13,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@next/bundle-analyzer": "^14.0.3",
     "hash-wasm": "^4.11.0",
     "next": "^14.0.2",
     "react": "^18",

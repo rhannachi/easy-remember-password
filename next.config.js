@@ -1,8 +1,5 @@
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-})
-
-module.exports = withBundleAnalyzer({
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   reactStrictMode: true,
   output: 'export',
   modularizeImports: {
@@ -11,14 +8,5 @@ module.exports = withBundleAnalyzer({
       skipDefaultConversion: true,
     },
   },
-})
-
-// /** @type {import('next').NextConfig} */
-// const nextConfig = {
-//   reactStrictMode: true,
-//   output: 'export',
-//   experimental: {
-//     optimizePackageImports: ['hash-wasm'],
-//   },
-// }
-// module.exports = nextConfig
+}
+module.exports = nextConfig

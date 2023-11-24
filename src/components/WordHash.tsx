@@ -73,7 +73,7 @@ export default function WordHash() {
         <Output label={hashTransformMemo} />
       </div>
 
-      <div className='flex flex-col mt-4'>
+      <div className='flex flex-col mt-2'>
         <div className='flex flex-row '>
           <Checkbox
             name='password-contains-lowercase'

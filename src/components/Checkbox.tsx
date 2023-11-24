@@ -16,7 +16,7 @@ export default function Checkbox({
   className?: string
 }) {
   return (
-    <div className={clsx('flex flex-row', className)}>
+    <div className={clsx('flex flex-row p-2', className)}>
       <input
         id={name}
         checked={checked}

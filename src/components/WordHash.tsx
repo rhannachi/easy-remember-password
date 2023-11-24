@@ -1,11 +1,14 @@
+'use client'
+
 import { ChangeEvent, useEffect, useMemo, useState } from 'react'
-import { bcrypt, BcryptOptions } from 'hash-wasm'
-import { Checkbox, Input, Output, Range } from '@/components'
-import { BCRYPT_DEFAULT_OPTIONS, hashTransform, PASSWORDS, randomInt } from '@/helpers'
+import { hashCalculator, hashTransform, PASSWORDS, randomInt } from '@/helpers'
+import Input from '@/components/Input'
+import Output from '@/components/Output'
+import Range from '@/components/Range'
+import Checkbox from '@/components/Checkbox'
 
 type WordHashType = {
   password: string
-  hashOptions: Omit<BcryptOptions, 'password'>
   hash: string
   length: number
   hasUppercase: boolean
@@ -13,23 +16,18 @@ type WordHashType = {
 }
 
 const WordHash = () => {
-  const [{ password, hashOptions, hash, length, hasSymbol, hasUppercase }, setState] =
-    useState<WordHashType>({
-      password: '',
-      hashOptions: BCRYPT_DEFAULT_OPTIONS,
-      hash: '',
-      length: 15,
-      hasSymbol: true,
-      hasUppercase: true,
-    })
+  const [{ password, hash, length, hasSymbol, hasUppercase }, setState] = useState<WordHashType>({
+    password: '',
+    hash: '',
+    length: 15,
+    hasSymbol: true,
+    hasUppercase: true,
+  })
 
   useEffect(() => {
     ;(async function () {
       const newPassword = PASSWORDS[randomInt(0, PASSWORDS.length - 1)]
-      const newHash = await bcrypt({
-        password: newPassword,
-        ...hashOptions,
-      })
+      const newHash = await hashCalculator(newPassword)
       setState((prevState) => ({
         ...prevState,
         password: newPassword,
@@ -43,10 +41,7 @@ const WordHash = () => {
       const newPassword = e.target.value
       let newHash = ''
       if (newPassword.length) {
-        newHash = await bcrypt({
-          password: newPassword,
-          ...hashOptions,
-        })
+        newHash = await hashCalculator(newPassword)
       }
       setState((prevState) => ({
         ...prevState,

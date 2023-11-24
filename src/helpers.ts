@@ -1,7 +1,6 @@
-import { BcryptOptions } from 'hash-wasm'
+import { bcrypt, BcryptOptions, blake2b } from 'hash-wasm'
 
-export const BCRYPT_DEFAULT_OPTIONS: Readonly<Omit<BcryptOptions, 'password'>> = {
-  salt: new Uint8Array([154, 224, 224, 142, 215, 205, 89, 168, 98, 54, 120, 67, 241, 27, 150, 154]),
+const BCRYPT_DEFAULT_OPTIONS: Readonly<Omit<BcryptOptions, 'password' | 'salt'>> = {
   costFactor: 4,
   outputType: 'encoded',
 }
@@ -21,6 +20,20 @@ export const randomInt = (min: number, max: number) => {
   min = Math.ceil(min)
   max = Math.floor(max)
   return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+export const hashCalculator = async (password: string): Promise<string> => {
+  try {
+    const salt = await blake2b(password, 64)
+    return bcrypt({
+      ...BCRYPT_DEFAULT_OPTIONS,
+      password,
+      salt,
+    })
+  } catch (e) {
+    console.error(`${e}`)
+  }
+  return Promise.resolve('')
 }
 
 export const hashTransform = ({

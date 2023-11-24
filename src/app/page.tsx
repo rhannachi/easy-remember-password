@@ -1,6 +1,4 @@
-'use client'
-
-import { WordHash } from '@/components'
+import WordHash from '@/components/WordHash'
 
 export default function Page() {
   return (
@@ -19,7 +17,6 @@ export default function Page() {
             ✍️ and emojis 😎
           </h3>
         </header>
-
         <WordHash />
       </div>
     </main>

@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 
-const Checkbox = ({
+export default function Checkbox({
   label,
   name,
   checked,
@@ -14,7 +14,7 @@ const Checkbox = ({
   onChange?: (value: boolean) => void
   disabled?: boolean
   className?: string
-}) => {
+}) {
   return (
     <div className={clsx('flex flex-row', className)}>
       <input
@@ -34,5 +34,3 @@ const Checkbox = ({
     </div>
   )
 }
-
-export default Checkbox

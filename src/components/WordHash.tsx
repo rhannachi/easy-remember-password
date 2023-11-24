@@ -15,7 +15,7 @@ type WordHashType = {
   hasSymbol: boolean
 }
 
-const WordHash = () => {
+export default function WordHash() {
   const [{ password, hash, length, hasSymbol, hasUppercase }, setState] = useState<WordHashType>({
     password: '',
     hash: '',
@@ -134,5 +134,3 @@ const WordHash = () => {
     </form>
   )
 }
-
-export default WordHash

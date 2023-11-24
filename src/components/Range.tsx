@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { ChangeEvent } from 'react'
 
-const Range = ({
+export default function Range({
   label,
   name,
   value,
@@ -17,7 +17,7 @@ const Range = ({
   max?: number
   onChange: (e: ChangeEvent<HTMLInputElement>) => void
   className?: string
-}) => {
+}) {
   return (
     <div className={clsx('flex flex-row items-center', className)}>
       <label htmlFor={name} className='text-xs font-medium text-gray-600'>
@@ -35,5 +35,3 @@ const Range = ({
     </div>
   )
 }
-
-export default Range

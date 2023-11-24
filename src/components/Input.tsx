@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react'
 
-const Input = ({
+export default function Input({
   placeholder,
   name,
   value,
@@ -13,7 +13,7 @@ const Input = ({
   maxLength?: number
   onChange: (e: ChangeEvent<HTMLInputElement>) => void
   className?: string
-}) => {
+}) {
   return (
     <label
       htmlFor={name}
@@ -31,5 +31,3 @@ const Input = ({
     </label>
   )
 }
-
-export default Input

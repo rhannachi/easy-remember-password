@@ -1,6 +1,6 @@
 {
   "name": "easy-to-remember-password",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "license": "MIT",
   "homepage": "https://rhannachi.github.io/easy-to-remember-password",
   "repository": "https://github.com/rhannachi/easy-to-remember-password.git",
@@ -8,7 +8,6 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:analyze": "ANALYZE=true next build",
     "start": "next start",
     "lint": "next lint"
   },

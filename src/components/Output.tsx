@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const Output = ({ label }: { label: string }) => {
+export default function Output({ label }: { label: string }) {
   const [isCopied, setIsCopied] = useState(false)
 
   const copyTextToClipboard = async (text: string) => {
@@ -36,5 +36,3 @@ const Output = ({ label }: { label: string }) => {
     </>
   )
 }
-
-export default Output

@@ -1,7 +1,7 @@
 'use client'
 
 import { ChangeEvent, useEffect, useMemo, useState } from 'react'
-import { hashCalculator, hashTransform, PASSWORDS, randomInt } from '@/helpers'
+import { hashCalculator, hashTransform, randomPassword } from '@/helpers'
 import Input from '@/components/Input'
 import Output from '@/components/Output'
 import Range from '@/components/Range'
@@ -26,7 +26,7 @@ export default function WordHash() {
 
   useEffect(() => {
     ;(async function () {
-      const newPassword = PASSWORDS[randomInt(0, PASSWORDS.length - 1)]
+      const newPassword = randomPassword()
       const newHash = await hashCalculator(newPassword)
       setState((prevState) => ({
         ...prevState,

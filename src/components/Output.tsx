@@ -12,16 +12,18 @@ export default function Output({ label }: { label: string }) {
   }
 
   const handleOnClick = () => {
-    copyTextToClipboard(label)
-      .then(() => {
-        setIsCopied(true)
-        setTimeout(() => {
-          setIsCopied(false)
-        }, 3500)
-      })
-      .catch((e) => {
-        console.error(`${e}`)
-      })
+    if (!isCopied) {
+      copyTextToClipboard(label)
+        .then(() => {
+          setIsCopied(true)
+          setTimeout(() => {
+            setIsCopied(false)
+          }, 3500)
+        })
+        .catch((e) => {
+          console.error(`${e}`)
+        })
+    }
   }
 
   return (

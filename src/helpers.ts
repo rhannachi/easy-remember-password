@@ -1,32 +1,33 @@
-import { bcrypt, blake2b, BcryptOptions } from 'hash-wasm'
+import { bcrypt, blake2b } from 'hash-wasm'
 
-const BCRYPT_DEFAULT_OPTIONS: Readonly<Omit<BcryptOptions, 'password' | 'salt'>> = {
-  costFactor: 4,
-  outputType: 'encoded',
-}
-
-export const PASSWORDS = [
+const PASSWORDS = [
   'Facebook 😎',
   'Linkedin 🎯',
   'Gmail 🖥️',
   'Tinder 🍑',
+  'Victor 🤘',
+  'Toto 💀',
+  '💩💩💩',
   'Instagram ❤️',
   'Gmail 🕹️',
   'Gmail 👨‍👩‍👦',
   'tiktok 🎬',
+  'Yasmine 🥰',
 ] as const
 
-export const randomInt = (min: number, max: number) => {
-  min = Math.ceil(min)
-  max = Math.floor(max)
-  return Math.floor(Math.random() * (max - min + 1)) + min
+export const randomPassword = () => {
+  const min = 0
+  const max = PASSWORDS.length - 1
+  const index = Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1)) + Math.ceil(min)
+  return PASSWORDS[index]
 }
 
 export const hashCalculator = async (password: string): Promise<string> => {
   try {
     const salt = await blake2b(password, 64)
     return bcrypt({
-      ...BCRYPT_DEFAULT_OPTIONS,
+      costFactor: 4,
+      outputType: 'encoded',
       password,
       salt,
     })

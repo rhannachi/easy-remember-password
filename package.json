@@ -2,8 +2,8 @@
   "name": "easy-to-remember-password",
   "version": "2.1.0",
   "license": "MIT",
-  "homepage": "https://rhannachi.github.io/easy-to-remember-password",
-  "repository": "https://github.com/rhannachi/easy-to-remember-password.git",
+  "homepage": "https://rhannachi.github.io/easy-remember-password",
+  "repository": "https://github.com/rhannachi/easy-remember-password.git",
   "description": "Generating your password with easy-to-remember words and emojis",
   "scripts": {
     "dev": "next dev",

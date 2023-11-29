@@ -153,11 +153,11 @@ export const main = async () => {
   const signature = sign(wallet, hash)
   if (!signature) return
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const isGood = await verify({
     hash,
     input,
     signature,
     publicExtendedKey,
   })
-  console.log('isGood', isGood)
 }

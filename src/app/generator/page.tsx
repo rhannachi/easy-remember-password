@@ -1,3 +1,11 @@
+import dynamic from 'next/dynamic'
+
+const Form = dynamic(() => import('./Form'), {
+  // TODO add loader ....
+  loading: () => <p className='text-white'>Loading...</p>,
+  ssr: true,
+})
+
 export default function Page() {
   return (
     <section>
@@ -14,7 +22,9 @@ export default function Page() {
           and emojis 😎
         </h3>
       </header>
-      <article></article>
+      <article>
+        <Form />
+      </article>
     </section>
   )
 }

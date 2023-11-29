@@ -28,7 +28,7 @@ export default function Output({ label }: { label: string }) {
 
   return (
     <>
-      <div className='flex flex-row py-2 bg-gray-50 px-1 w-full justify-end h-10'>
+      <div className='flex flex-row py-2 bg-gray-100 px-1 w-full justify-end h-10'>
         <div className='text-center font-semibold text-blue-600 w-full'>{label}</div>
         <div onClick={handleOnClick} className='absolute cursor-pointer '>
           📋

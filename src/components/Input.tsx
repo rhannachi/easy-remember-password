@@ -17,7 +17,7 @@ export default function Input({
   return (
     <label
       htmlFor={name}
-      className='bg-gray-50 border-2 border-blue-600 text-md rounded w-full py-2 px-3 text-gray-700'
+      className='bg-gray-50 border-2 border-white text-md rounded w-full py-2 px-3 text-gray-800'
     >
       <input
         id={name}

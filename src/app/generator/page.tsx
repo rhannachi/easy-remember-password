@@ -14,7 +14,7 @@ export default function Page() {
           Easy to remember password
         </h1>
         <span className='text-2xl'>*️⃣</span>
-        <h2 className=' text-xl text-center mt-10'>
+        <h2 className='text-xl text-center mt-10'>
           Are you tired 😖 of <span className='line-through'>forgetting</span> your passwords ?
         </h2>
         <h3 className='text-justify mt-2 '>

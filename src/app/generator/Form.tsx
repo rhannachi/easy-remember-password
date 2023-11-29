@@ -61,7 +61,7 @@ export default function Form() {
   )
 
   return (
-    <form className='flex flex-col mt-10 p-5 bg-white rounded-lg 2xl:mx-52'>
+    <form className='flex flex-col mt-10 p-5 bg-[#C2EAFF] rounded-lg 2xl:mx-52'>
       <Input
         value={password}
         maxLength={20}

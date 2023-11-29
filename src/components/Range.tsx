@@ -20,7 +20,7 @@ export default function Range({
 }) {
   return (
     <div className={clsx('flex flex-row items-center', className)}>
-      <label htmlFor={name} className='text-xs font-medium text-gray-600'>
+      <label htmlFor={name} className='text-xs font-semibold text-gray-800'>
         {label}
       </label>
       <input

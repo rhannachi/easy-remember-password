@@ -25,10 +25,7 @@ export default function Checkbox({
         type='checkbox'
         className='mr-0.5'
       />
-      <label
-        htmlFor={name}
-        className={clsx('text-xs font-medium', disabled ? 'text-gray-300' : 'text-gray-600')}
-      >
+      <label htmlFor={name} className='font-semibold text-gray-800 text-xs font-medium'>
         {label}
       </label>
     </div>

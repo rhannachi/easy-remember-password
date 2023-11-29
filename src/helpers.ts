@@ -22,6 +22,23 @@ export const randomPassword = () => {
   return PASSWORDS[index]
 }
 
+// export const digestArgon2 = async (password: string, salt: string): Promise<string | void> => {
+//   try {
+//     const saltBuffer = await blake2b(salt, 32)
+//     return argon2id({
+//       parallelism: 1,
+//       iterations: 256,
+//       memorySize: 512, // use 512KB memory
+//       hashLength: 32, // output size = 32 bytes
+//       outputType: 'encoded',
+//       password,
+//       salt: saltBuffer,
+//     })
+//   } catch (e) {
+//     console.error(`${e}`)
+//   }
+// }
+
 export const hashCalculator = async (password: string): Promise<string> => {
   try {
     const salt = await blake2b(password, 64)
@@ -61,4 +78,86 @@ export const hashTransform = ({
     console.error(`${e}`)
   }
   return hash
+}
+
+// ******************************************************** //
+
+import * as bip39 from 'bip39'
+import HdKey from 'hdkey'
+
+const generateWallet = async (passphrase: string, password: string): Promise<HdKey | void> => {
+  try {
+    const hash = await digestSha256(`${passphrase.trim()}${password.trim()}`)
+    if (!hash) return
+    const mnemonic = bip39.entropyToMnemonic(hash)
+    const seed = bip39.mnemonicToSeedSync(mnemonic)
+    return HdKey.fromMasterSeed(seed)
+  } catch (e) {
+    console.error(`${e}`)
+  }
+}
+
+const digestSha256 = async (input: string | object): Promise<Buffer | void> => {
+  try {
+    let text = JSON.stringify(input)
+    if (typeof input === 'string') {
+      text = input
+    }
+    const data = new TextEncoder().encode(text)
+    const hash = await crypto.subtle.digest('SHA-256', data)
+    return Buffer.from(hash)
+  } catch (e) {
+    console.error(`${e}`)
+  }
+}
+
+const sign = (wallet: HdKey, hash: Buffer): Buffer | void => {
+  try {
+    return wallet.sign(hash) // signature
+  } catch (e) {
+    console.error(`${e}`)
+  }
+}
+
+const verify = async ({
+  input,
+  publicExtendedKey,
+  hash,
+  signature,
+}: {
+  publicExtendedKey: string
+  input: string | object
+  hash: Buffer
+  signature: Buffer
+}): Promise<boolean> => {
+  try {
+    const hashInput = await digestSha256(input)
+    if (hashInput && Buffer.compare(hashInput, hash) === 0) {
+      return HdKey.fromExtendedKey(publicExtendedKey).verify(hash, signature)
+    }
+  } catch (e) {
+    console.error(`${e}`)
+  }
+  return false
+}
+
+export const main = async () => {
+  const wallet = await generateWallet('ramzi hannachi 123 123', '123 123')
+  if (!wallet) return
+
+  const publicExtendedKey = wallet.publicExtendedKey
+  const input = 'Ramzi HANNAChi'
+  const hash = await digestSha256(input)
+  if (!hash) return
+
+  const signature = sign(wallet, hash)
+  if (!signature) return
+
+  const isGood = await verify({
+    hash,
+    input,
+    signature,
+    publicExtendedKey,
+  })
+  console.log('isGood', isGood)
 }

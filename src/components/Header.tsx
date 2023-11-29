@@ -3,27 +3,42 @@ import Link from 'next/link'
 export default function Header() {
   return (
     <header className='bg-[#2872EC] flex justify-center'>
-      <nav className='container text-white p-4 flex items-center justify-between flex-wrap'>
+      <nav className='container text-white p-4 flex justify-between flex-wrap'>
         <h1 className='text-2xl font-bold mr-10 '>
-          <Link className='block lg:inline-block lg:mt-0 text-white hover:text-gray-300' href='/'>
-            <div className='flex flex-row items-center'>
-              MyPass
-              <svg
-                className='ml-1'
-                xmlns='http://www.w3.org/2000/svg'
-                width='24'
-                height='24'
-                viewBox='0 0 24 24'
-                fill='none'
-                stroke='currentColor'
-                strokeWidth='2'
+          <Link className='flex flex-row lg:mt-0 text-white' href='/'>
+            <svg
+              className='mr-1'
+              width='35'
+              height='36'
+              viewBox='0 0 48 49'
+              fill='none'
+              xmlns='http://www.w3.org/2000/svg'
+            >
+              <rect width='48' height='48' fill='white' fillOpacity='0.01' />
+              <path d='M48 1H0V49H48V1Z' fill='white' fillOpacity='0.01' />
+              <path
+                d='M6 9.25564L24.0086 4L42 9.25564V20.0337C42 31.3622 34.7502 41.4194 24.0026 45.0005C13.2521 41.4195 6 31.36 6 20.0287V9.25564Z'
+                fill='#2F88FF'
+                stroke='black'
+                strokeWidth='4'
+                strokeLinejoin='round'
+              />
+              <path
+                d='M29.5 18.4081L18.1863 29.7218'
+                stroke='white'
+                strokeWidth='4'
                 strokeLinecap='round'
                 strokeLinejoin='round'
-              >
-                <path d='M21 12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5z'></path>
-                <rect x='3' y='13' width='18' height='8' rx='2' ry='2'></rect>
-              </svg>
-            </div>
+              />
+              <path
+                d='M18.1863 18.4081L29.5 29.7218'
+                stroke='white'
+                strokeWidth='4'
+                strokeLinecap='round'
+                strokeLinejoin='round'
+              />
+            </svg>
+            MyPass
           </Link>
         </h1>
 

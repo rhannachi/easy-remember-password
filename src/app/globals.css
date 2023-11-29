@@ -2,10 +2,3 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-    background: #0A2D4D;
-}
-
-body > header {
-    background: #2872EC;
-}

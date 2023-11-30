@@ -1,7 +1,7 @@
 'use client'
 
 import { ChangeEvent, useEffect, useMemo, useState } from 'react'
-import { hashCalculator, hashTransform, main, randomPassword } from '@/helpers'
+import { hashCalculator, hashTransform, randomPassword } from '@/helpers'
 import Input from '@/components/Input'
 import Output from '@/components/Output'
 import Range from '@/components/Range'
@@ -26,8 +26,6 @@ export default function Form() {
 
   useEffect(() => {
     ;(async function () {
-      await main()
-
       const newPassword = randomPassword()
       const newHash = await hashCalculator(newPassword)
       setState((prevState) => ({
@@ -67,6 +65,7 @@ export default function Form() {
         maxLength={20}
         name='password-input'
         placeholder='Your simple pass ...'
+        inputClassName='text-center'
         onChange={handleOnChange}
       />
 
@@ -120,7 +119,7 @@ export default function Form() {
           value={length}
           name='password-length'
           label={
-            <div className='w-19'>
+            <div className='w-24'>
               Length (<span className='text-blue-600'>{length}</span>):
             </div>
           }

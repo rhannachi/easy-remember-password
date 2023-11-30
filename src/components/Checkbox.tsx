@@ -16,18 +16,16 @@ export default function Checkbox({
   className?: string
 }) {
   return (
-    <div className={clsx('flex flex-row p-2', className)}>
+    <label htmlFor={name} className={clsx('text-gray-600 text-md flex items-center', className)}>
       <input
         id={name}
         checked={checked}
         disabled={disabled}
         onChange={(e) => onChange && onChange(e.target.checked)}
         type='checkbox'
-        className='mr-0.5'
+        className='m-1 w-4 h-4'
       />
-      <label htmlFor={name} className='font-semibold text-gray-800 text-xs font-medium'>
-        {label}
-      </label>
-    </div>
+      {label}
+    </label>
   )
 }

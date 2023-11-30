@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { ChangeEvent } from 'react'
 
 export default function Input({
@@ -6,6 +7,8 @@ export default function Input({
   value,
   maxLength = 20,
   onChange,
+  className,
+  inputClassName,
 }: {
   placeholder: string
   name: string
@@ -13,18 +16,25 @@ export default function Input({
   maxLength?: number
   onChange: (e: ChangeEvent<HTMLInputElement>) => void
   className?: string
+  inputClassName?: string
 }) {
   return (
     <label
       htmlFor={name}
-      className='bg-gray-50 border-2 border-white text-md rounded w-full py-2 px-3 text-gray-800'
+      className={clsx(
+        'bg-gray-50 border-2 border-white text-md rounded w-full py-2 px-2 text-gray-600',
+        className,
+      )}
     >
       <input
         id={name}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className='w-full text-center bg-gray-50 focus:outline-none focus:shadow-outline'
+        className={clsx(
+          'w-full bg-gray-50 focus:outline-none focus:shadow-outline',
+          inputClassName,
+        )}
         type='text'
         maxLength={maxLength}
       />

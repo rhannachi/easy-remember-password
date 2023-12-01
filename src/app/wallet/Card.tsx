@@ -4,6 +4,7 @@ import ButtonIcon from '@/components/ButtonIcon'
 import Input from '@/components/Input'
 import Checkbox from '@/components/Checkbox'
 import Range from '@/components/Range'
+import Button from '@/components/Button'
 
 export default function Card() {
   return (
@@ -69,13 +70,23 @@ export default function Card() {
           }
           onChange={() => {}}
         />
-        <div className='flex flex-row justify-end mt-5 items-center h-11'>
-          <button className='text-white font-semibold rounded-3xl border-0 bg-red-600 mx-1 p-2 text-sm w-28 h-9 '>
-            Supprimer
-          </button>
-          <button className='text-white font-semibold bg-blue-600 rounded-3xl border-0 p-2 mx-1 text-sm w-28 h-9 '>
-            Valider
-          </button>
+        <div className='flex flex-row justify-between mt-5 items-center h-11'>
+          <Button
+            style='secondary'
+            color='red'
+            text='Supprimer'
+            name='remove-form-button'
+            type='button'
+            className='w-full'
+          />
+          <Button
+            style='primary'
+            color='blue'
+            text='Valider'
+            name='submit-form-button'
+            type='submit'
+            className='w-full'
+          />
         </div>
       </form>
     </article>

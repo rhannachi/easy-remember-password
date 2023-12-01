@@ -22,7 +22,7 @@ export default function Input({
     <label
       htmlFor={name}
       className={clsx(
-        'bg-gray-50 border-2 border-white text-md rounded w-full py-2 px-2 text-gray-600',
+        'bg-gray-50 border-2 border-white text-md rounded w-full p-2 text-gray-600',
         className,
       )}
     >

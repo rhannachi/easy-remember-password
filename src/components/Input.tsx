@@ -1,5 +1,5 @@
-import clsx from 'clsx'
-import { ChangeEvent } from 'react'
+import clsx from "clsx"
+import { ChangeEvent } from "react"
 
 export default function Input({
   placeholder,
@@ -22,7 +22,7 @@ export default function Input({
     <label
       htmlFor={name}
       className={clsx(
-        'bg-gray-50 border-2 border-white text-md rounded w-full p-2 text-gray-600',
+        "bg-gray-50 border-2 border-white text-md rounded w-full p-2 text-gray-600",
         className,
       )}
     >
@@ -32,10 +32,10 @@ export default function Input({
         onChange={onChange}
         placeholder={placeholder}
         className={clsx(
-          'w-full bg-gray-50 focus:outline-none focus:shadow-outline',
+          "w-full bg-gray-50 focus:outline-none focus:shadow-outline",
           inputClassName,
         )}
-        type='text'
+        type="text"
         maxLength={maxLength}
       />
     </label>

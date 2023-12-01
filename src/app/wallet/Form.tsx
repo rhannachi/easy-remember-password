@@ -1,23 +1,23 @@
-'use client'
+"use client"
 
-import Input from '@/components/Input'
+import Input from "@/components/Input"
 
 export default function Form() {
   return (
-    <form className='flex flex-col'>
+    <form className="flex flex-col">
       <Input
-        value=''
+        value=""
         maxLength={20}
-        name='seed-user'
-        placeholder='your passphrase...'
+        name="seed-user"
+        placeholder="your passphrase..."
         onChange={() => {}}
       />
       <Input
-        value=''
-        className='mt-2'
+        value=""
+        className="mt-2"
         maxLength={20}
-        name='passphrase-user'
-        placeholder='your password...'
+        name="passphrase-user"
+        placeholder="your password..."
         onChange={() => {}}
       />
     </form>

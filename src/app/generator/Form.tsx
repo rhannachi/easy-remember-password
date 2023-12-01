@@ -1,11 +1,11 @@
-'use client'
+"use client"
 
-import { ChangeEvent, useEffect, useMemo, useState } from 'react'
-import { hashCalculator, hashTransform, randomPassword } from '@/helpers'
-import Input from '@/components/Input'
-import Output from '@/components/Output'
-import Range from '@/components/Range'
-import Checkbox from '@/components/Checkbox'
+import { ChangeEvent, useEffect, useMemo, useState } from "react"
+import { hashCalculator, hashTransform, randomPassword } from "@/helpers"
+import Input from "@/components/Input"
+import Output from "@/components/Output"
+import Range from "@/components/Range"
+import Checkbox from "@/components/Checkbox"
 
 type WordHashType = {
   password: string
@@ -17,8 +17,8 @@ type WordHashType = {
 
 export default function Form() {
   const [{ password, hash, length, hasSymbol, hasUppercase }, setState] = useState<WordHashType>({
-    password: '',
-    hash: '',
+    password: "",
+    hash: "",
     length: 15,
     hasSymbol: true,
     hasUppercase: true,
@@ -39,7 +39,7 @@ export default function Form() {
   const handleOnChange = async (e: ChangeEvent<HTMLInputElement>) => {
     try {
       const newPassword = e.target.value
-      let newHash = ''
+      let newHash = ""
       if (newPassword.length) {
         newHash = await hashCalculator(newPassword)
       }
@@ -59,40 +59,40 @@ export default function Form() {
   )
 
   return (
-    <form className='flex flex-col mt-10 p-5 bg-[#C2EAFF] rounded-lg 2xl:mx-52'>
+    <form className="flex flex-col mt-10 p-5 bg-[#C2EAFF] rounded-lg 2xl:mx-52">
       <Input
         value={password}
         maxLength={20}
-        name='password-input'
-        placeholder='Your simple pass ...'
-        inputClassName='text-center'
+        name="password-input"
+        placeholder="Your simple pass ..."
+        inputClassName="text-center"
         onChange={handleOnChange}
       />
 
-      <div className='flex flex-col items-center'>
-        <span className='font-semibold text-xl text-blue-600 my-1 rotate-90 '>➤</span>
+      <div className="flex flex-col items-center">
+        <span className="font-semibold text-xl text-blue-600 my-1 rotate-90 ">➤</span>
         <Output label={hashTransformMemo} />
       </div>
 
-      <div className='flex flex-col mt-2'>
-        <div className='flex flex-row '>
+      <div className="flex flex-col mt-2">
+        <div className="flex flex-row ">
           <Checkbox
-            name='password-contains-lowercase'
-            className='basis-1/4'
+            name="password-contains-lowercase"
+            className="basis-1/4"
             checked={true}
-            label='abc'
+            label="abc"
             disabled
           />
           <Checkbox
-            name='password-contains-numeric'
-            className='basis-1/4 justify-center'
+            name="password-contains-numeric"
+            className="basis-1/4 justify-center"
             checked={true}
-            label='123'
+            label="123"
             disabled
           />
           <Checkbox
-            name='password-contains-uppercase'
-            className='basis-1/4 justify-center'
+            name="password-contains-uppercase"
+            className="basis-1/4 justify-center"
             checked={hasUppercase}
             onChange={(value) =>
               setState((prevState) => ({
@@ -100,11 +100,11 @@ export default function Form() {
                 hasUppercase: value,
               }))
             }
-            label='ABC'
+            label="ABC"
           />
           <Checkbox
-            name='password-contains-special-character'
-            className='basis-1/4 justify-end'
+            name="password-contains-special-character"
+            className="basis-1/4 justify-end"
             onChange={(value) =>
               setState((prevState) => ({
                 ...prevState,
@@ -112,18 +112,18 @@ export default function Form() {
               }))
             }
             checked={hasSymbol}
-            label='#$&'
+            label="#$&"
           />
         </div>
         <Range
           value={length}
-          name='password-length'
+          name="password-length"
           label={
-            <div className='w-24'>
-              Length (<span className='text-blue-600'>{length}</span>):
+            <div className="w-24">
+              Length (<span className="text-blue-600">{length}</span>):
             </div>
           }
-          className='mt-2'
+          className="mt-2"
           onChange={(e) =>
             setState((prevState) => ({
               ...prevState,

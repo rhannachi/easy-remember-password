@@ -1,18 +1,18 @@
-import clsx from 'clsx'
-import { ButtonHTMLAttributes } from 'react'
+import clsx from "clsx"
+import { ButtonHTMLAttributes } from "react"
 
 export default function Button({
   name,
   text,
-  color = 'blue',
-  style = 'primary',
+  color = "blue",
+  style = "primary",
   className,
   ...props
 }: ButtonHTMLAttributes<HTMLButtonElement> & {
   name: string
   text: string
-  color?: 'blue' | 'red'
-  style?: 'primary' | 'secondary'
+  color?: "blue" | "red"
+  style?: "primary" | "secondary"
   className?: string
 }) {
   const primaryClassName = `text-white border-0 bg-${color}-600`
@@ -21,12 +21,12 @@ export default function Button({
     <button
       {...props}
       name={name}
-      type='submit'
-      role='button'
+      type="submit"
+      role="button"
       className={clsx(
-        'rounded h-9 m-1 p-1 text-md',
+        "rounded h-9 m-1 p-1 text-md",
         className,
-        style === 'secondary' ? secondaryClassName : primaryClassName,
+        style === "secondary" ? secondaryClassName : primaryClassName,
       )}
     >
       {text}

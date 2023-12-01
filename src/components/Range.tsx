@@ -1,5 +1,5 @@
-import clsx from 'clsx'
-import { ChangeEvent } from 'react'
+import clsx from "clsx"
+import { ChangeEvent } from "react"
 
 export default function Range({
   label,
@@ -19,17 +19,17 @@ export default function Range({
   className?: string
 }) {
   return (
-    <div className={clsx('flex flex-row items-center', className)}>
-      <label htmlFor={name} className='text-md text-gray-600'>
+    <div className={clsx("flex flex-row items-center", className)}>
+      <label htmlFor={name} className="text-md text-gray-600">
         {label}
       </label>
       <input
         id={name}
-        className='w-full h-2 rounded bg-gray-200 appearance-none'
+        className="w-full h-2 rounded bg-gray-200 appearance-none"
         min={min}
         max={max}
         value={value}
-        type='range'
+        type="range"
         onChange={onChange}
       />
     </div>

@@ -1,18 +1,18 @@
-import { bcrypt, blake2b } from 'hash-wasm'
+import { bcrypt, blake2b } from "hash-wasm"
 
 const PASSWORDS = [
-  'Facebook 😎',
-  'Linkedin 🎯',
-  'Gmail 🖥️',
-  'Tinder 🍑',
-  'Victor 🤘',
-  'Toto 💀',
-  '💩💩💩',
-  'Instagram ❤️',
-  'Gmail 🕹️',
-  'Gmail 👨‍👩‍👦',
-  'tiktok 🎬',
-  'Yasmine 🥰',
+  "Facebook 😎",
+  "Linkedin 🎯",
+  "Gmail 🖥️",
+  "Tinder 🍑",
+  "Victor 🤘",
+  "Toto 💀",
+  "💩💩💩",
+  "Instagram ❤️",
+  "Gmail 🕹️",
+  "Gmail 👨‍👩‍👦",
+  "tiktok 🎬",
+  "Yasmine 🥰",
 ] as const
 
 export const randomPassword = () => {
@@ -44,14 +44,14 @@ export const hashCalculator = async (password: string): Promise<string> => {
     const salt = await blake2b(password, 64)
     return bcrypt({
       costFactor: 4,
-      outputType: 'encoded',
+      outputType: "encoded",
       password,
       salt,
     })
   } catch (e) {
     console.error(`${e}`)
   }
-  return Promise.resolve('')
+  return Promise.resolve("")
 }
 
 export const hashTransform = ({
@@ -66,12 +66,12 @@ export const hashTransform = ({
   hasSymbol: boolean
 }) => {
   try {
-    let newHash = hash.split('').reverse().join('')
+    let newHash = hash.split("").reverse().join("")
     if (!hasUppercase) {
-      newHash = newHash.replace(/[A-Z]/g, '')
+      newHash = newHash.replace(/[A-Z]/g, "")
     }
     if (!hasSymbol) {
-      newHash = newHash.replace(/[^a-zA-Z0-9]/g, '')
+      newHash = newHash.replace(/[^a-zA-Z0-9]/g, "")
     }
     return newHash.slice(0, length)
   } catch (e) {
@@ -82,8 +82,8 @@ export const hashTransform = ({
 
 // ******************************************************** //
 
-import * as bip39 from 'bip39'
-import HdKey from 'hdkey'
+import * as bip39 from "bip39"
+import HdKey from "hdkey"
 
 const generateWallet = async (passphrase: string, password: string): Promise<HdKey | void> => {
   try {
@@ -100,11 +100,11 @@ const generateWallet = async (passphrase: string, password: string): Promise<HdK
 const digestSha256 = async (input: string | object): Promise<Buffer | void> => {
   try {
     let text = JSON.stringify(input)
-    if (typeof input === 'string') {
+    if (typeof input === "string") {
       text = input
     }
     const data = new TextEncoder().encode(text)
-    const hash = await crypto.subtle.digest('SHA-256', data)
+    const hash = await crypto.subtle.digest("SHA-256", data)
     return Buffer.from(hash)
   } catch (e) {
     console.error(`${e}`)
@@ -142,11 +142,11 @@ const verify = async ({
 }
 
 export const main = async () => {
-  const wallet = await generateWallet('ramzi hannachi 123 123', '123 123')
+  const wallet = await generateWallet("ramzi hannachi 123 123", "123 123")
   if (!wallet) return
 
   const publicExtendedKey = wallet.publicExtendedKey
-  const input = 'Ramzi HANNAChi'
+  const input = "Ramzi HANNAChi"
   const hash = await digestSha256(input)
   if (!hash) return
 

@@ -1,13 +1,13 @@
-import { useState } from 'react'
+import { useState } from "react"
 
 export default function Output({ label }: { label: string }) {
   const [isCopied, setIsCopied] = useState(false)
 
   const copyTextToClipboard = async (text: string) => {
-    if ('clipboard' in navigator) {
+    if ("clipboard" in navigator) {
       return await navigator.clipboard.writeText(text)
     } else {
-      return document.execCommand('copy', true, text)
+      return document.execCommand("copy", true, text)
     }
   }
 
@@ -28,13 +28,13 @@ export default function Output({ label }: { label: string }) {
 
   return (
     <>
-      <div className='flex flex-row py-2 bg-gray-100 px-1 w-full justify-end h-10 rounded-xl'>
-        <div className='text-center font-semibold text-blue-600 w-full'>{label}</div>
-        <div onClick={handleOnClick} className='absolute cursor-pointer '>
+      <div className="flex flex-row py-2 bg-gray-100 px-1 w-full justify-end h-10 rounded-xl">
+        <div className="text-center font-semibold text-blue-600 w-full">{label}</div>
+        <div onClick={handleOnClick} className="absolute cursor-pointer ">
           📋
         </div>
       </div>
-      <div className='text-sm text-green-600 h-3'>{isCopied && 'Copied !'}</div>
+      <div className="text-sm text-green-600 h-3">{isCopied && "Copied !"}</div>
     </>
   )
 }

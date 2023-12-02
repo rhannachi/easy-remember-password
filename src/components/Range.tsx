@@ -1,36 +1,29 @@
 import clsx from "clsx"
-import { ChangeEvent } from "react"
+import { InputHTMLAttributes } from "react"
 
 export default function Range({
   label,
-  name,
-  value,
   min = 6,
   max = 20,
-  onChange,
   className,
-}: {
+  ...props
+}: InputHTMLAttributes<HTMLInputElement> & {
   label: string | JSX.Element
-  name: string
-  value: number
-  min?: number
-  max?: number
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void
-  className?: string
 }) {
   return (
     <div className={clsx("flex flex-row items-center", className)}>
-      <label htmlFor={name} className="text-md text-gray-600">
+      <label htmlFor={props.name} className="text-md text-gray-700">
         {label}
       </label>
       <input
-        id={name}
+        {...props}
+        id={props.name}
         className="w-full h-2 rounded bg-gray-200 appearance-none"
         min={min}
         max={max}
-        value={value}
+        value={props.value}
         type="range"
-        onChange={onChange}
+        onChange={props.onChange}
       />
     </div>
   )

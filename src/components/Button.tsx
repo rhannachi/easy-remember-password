@@ -4,29 +4,31 @@ import { ButtonHTMLAttributes } from "react"
 export default function Button({
   name,
   text,
-  color = "blue",
   style = "primary",
   className,
   ...props
 }: ButtonHTMLAttributes<HTMLButtonElement> & {
   name: string
   text: string
-  color?: "blue" | "red"
-  style?: "primary" | "secondary"
-  className?: string
+  style?: "primary" | "secondary" | "warning"
 }) {
-  const primaryClassName = `text-white border-0 bg-${color}-600`
-  const secondaryClassName = `border-2 border-${color}-600 text-${color}-600`
+  const primaryClassName = "text-white border-0 bg-blue-600"
+  const secondaryClassName = "border-2 border-blue-600 text-blue-600"
+  const warningClassName = "border-2 border-red-600 text-red-600"
+
   return (
     <button
       {...props}
       name={name}
-      type="submit"
       role="button"
       className={clsx(
         "rounded h-9 m-1 p-1 text-md",
         className,
-        style === "secondary" ? secondaryClassName : primaryClassName,
+        style === "secondary"
+          ? secondaryClassName
+          : style === "warning"
+            ? warningClassName
+            : primaryClassName,
       )}
     >
       {text}

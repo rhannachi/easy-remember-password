@@ -5,20 +5,13 @@ import Input from "@/components/Input"
 export default function Form() {
   return (
     <form className="flex flex-col">
+      <Input label="Passphrase:" maxLength={20} name="seed-user" placeholder="your passphrase..." />
       <Input
-        value=""
-        maxLength={20}
-        name="seed-user"
-        placeholder="your passphrase..."
-        onChange={() => {}}
-      />
-      <Input
-        value=""
+        label="Password:"
         className="mt-2"
         maxLength={20}
         name="passphrase-user"
         placeholder="your password..."
-        onChange={() => {}}
       />
     </form>
   )

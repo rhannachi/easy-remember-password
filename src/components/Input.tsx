@@ -1,43 +1,29 @@
 import clsx from "clsx"
-import { ChangeEvent } from "react"
+import { InputHTMLAttributes } from "react"
 
 export default function Input({
-  placeholder,
-  name,
-  value,
-  maxLength = 20,
-  onChange,
-  className,
+  label,
   inputClassName,
-}: {
-  placeholder: string
-  name: string
-  value: string
-  maxLength?: number
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void
-  className?: string
+  className,
+  ...props
+}: InputHTMLAttributes<HTMLInputElement> & {
+  label?: string
   inputClassName?: string
 }) {
   return (
-    <label
-      htmlFor={name}
-      className={clsx(
-        "bg-gray-50 border-2 border-white text-md rounded w-full p-2 text-gray-600",
-        className,
-      )}
-    >
+    <div className={clsx("flex flex-col w-full text-md", className)}>
+      <label hidden={!label} htmlFor={props.name} className={clsx("text-white")}>
+        {label}
+      </label>
       <input
-        id={name}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
+        {...props}
+        id={props.name}
         className={clsx(
-          "w-full bg-gray-50 focus:outline-none focus:shadow-outline",
+          "text-gray-700 rounded border-2 border-white p-2 bg-gray-50 focus:outline-none focus:shadow-outline",
           inputClassName,
         )}
         type="text"
-        maxLength={maxLength}
       />
-    </label>
+    </div>
   )
 }

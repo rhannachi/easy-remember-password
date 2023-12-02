@@ -1,27 +1,24 @@
 import clsx from "clsx"
+import { InputHTMLAttributes } from "react"
 
 export default function Checkbox({
   label,
-  name,
-  checked,
-  disabled = false,
-  onChange,
   className,
-}: {
+  ...props
+}: InputHTMLAttributes<HTMLInputElement> & {
   label: string | JSX.Element
-  name: string
-  checked: boolean
-  onChange?: (value: boolean) => void
-  disabled?: boolean
-  className?: string
 }) {
   return (
-    <label htmlFor={name} className={clsx("text-gray-600 text-md flex items-center", className)}>
+    <label
+      htmlFor={props.name}
+      className={clsx("text-gray-700 text-md flex items-center", className)}
+    >
       <input
-        id={name}
-        checked={checked}
-        disabled={disabled}
-        onChange={(e) => onChange && onChange(e.target.checked)}
+        {...props}
+        id={props.name}
+        checked={props.checked}
+        disabled={props.disabled}
+        onChange={props.onChange}
         type="checkbox"
         className="m-1 w-4 h-4"
       />

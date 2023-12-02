@@ -63,7 +63,7 @@ export default function Form() {
       <Input
         value={password}
         maxLength={20}
-        name="password-input"
+        name="form-password-input"
         placeholder="Your simple pass ..."
         inputClassName="text-center"
         onChange={handleOnChange}
@@ -97,7 +97,7 @@ export default function Form() {
             onChange={(value) =>
               setState((prevState) => ({
                 ...prevState,
-                hasUppercase: value,
+                hasUppercase: value.target.checked,
               }))
             }
             label="ABC"
@@ -108,7 +108,7 @@ export default function Form() {
             onChange={(value) =>
               setState((prevState) => ({
                 ...prevState,
-                hasSymbol: value,
+                hasSymbol: value.target.checked,
               }))
             }
             checked={hasSymbol}

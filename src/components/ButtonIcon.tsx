@@ -1,4 +1,5 @@
 import clsx from "clsx"
+import { ButtonHTMLAttributes } from "react"
 
 type SvgType = "trash" | "arrowUp" | "copy" | "regenerate"
 
@@ -47,19 +48,15 @@ const SVG: Readonly<Record<SvgType, (className?: string) => JSX.Element>> = {
 
 export default function ButtonIcon({
   svg,
-  name,
   size = "w-6 h-6",
   className,
-  onClick,
-}: {
+  ...props
+}: ButtonHTMLAttributes<HTMLButtonElement> & {
   svg: SvgType
-  name: string
-  className?: string
   size?: "w-5 h-5" | "w-6 h-6" | "w-7 h-7"
-  onClick?: () => void
 }) {
   return (
-    <button name={name} className={clsx("m-1", className)} onClick={onClick}>
+    <button {...props} className={clsx("m-1", className)}>
       {SVG[svg](clsx(size, ""))}
     </button>
   )

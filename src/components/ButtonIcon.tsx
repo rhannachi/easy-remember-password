@@ -36,7 +36,7 @@ const SVG: Readonly<Record<SvgType, (className?: string) => JSX.Element>> = {
   ),
   arrowUp: (className?: string) => (
     <svg
-      className={clsx("fill-blue-600", className)}
+      className={clsx("fill-white", className)}
       fill="none"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
@@ -56,7 +56,7 @@ export default function ButtonIcon({
   size?: "w-5 h-5" | "w-6 h-6" | "w-7 h-7"
 }) {
   return (
-    <button {...props} className={clsx("m-1", className)}>
+    <button {...props} className={clsx("", className)}>
       {SVG[svg](clsx(size, ""))}
     </button>
   )

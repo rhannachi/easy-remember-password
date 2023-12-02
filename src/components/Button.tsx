@@ -22,7 +22,7 @@ export default function Button({
       name={name}
       role="button"
       className={clsx(
-        "rounded h-9 m-1 p-1 text-md",
+        "rounded h-9 p-1 text-md",
         className,
         style === "secondary"
           ? secondaryClassName

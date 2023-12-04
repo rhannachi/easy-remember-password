@@ -22,7 +22,6 @@ export default function Input({
           "text-gray-700 rounded border-2 border-white p-2 bg-gray-50 focus:outline-none focus:shadow-outline",
           inputClassName,
         )}
-        type="text"
       />
     </div>
   )

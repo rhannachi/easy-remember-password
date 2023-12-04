@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic"
+import { CardType } from "./Card"
 
 const Form = dynamic(() => import("./Form"), {
   // TODO add loader ....
@@ -10,6 +11,42 @@ const Card = dynamic(() => import("./Card"), {
   loading: () => <p className="text-white">Loading...</p>,
   ssr: false,
 })
+
+const cards: CardType[] = [
+  {
+    uuid: "2346123", // click sur g ou création new card
+    link: "www.facebook.com",
+    username: "rhannachi",
+    password: "bla bla bla",
+    hasNumeric: true,
+    hasLowercase: true,
+    hasUppercase: true,
+    hasSymbol: true,
+    length: 15,
+  },
+  {
+    uuid: "2678SFGS", // click sur g ou création new card
+    link: "www.facebook.com",
+    username: "rhannachi",
+    password: "bla bla bla",
+    hasNumeric: true,
+    hasLowercase: true,
+    hasUppercase: true,
+    hasSymbol: true,
+    length: 15,
+  },
+  {
+    uuid: "54GGGGSZGR", // click sur g ou création new card
+    link: "www.facebook.com",
+    username: "rhannachi",
+    password: "bla bla bla",
+    hasNumeric: true,
+    hasLowercase: true,
+    hasUppercase: true,
+    hasSymbol: true,
+    length: 15,
+  },
+]
 
 export default function Page() {
   return (
@@ -41,11 +78,9 @@ export default function Page() {
       </section>
       {/** * Cards ****/}
       <section className="mt-10 justify-items-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
-        <Card className="m-1" />
-        <Card className="m-1" />
-        <Card className="m-1" />
-        <Card className="m-1" />
-        <Card className="m-1" />
+        {cards.map((card) => (
+          <Card key={card.uuid} {...card} className="m-1" />
+        ))}
       </section>
     </section>
   )

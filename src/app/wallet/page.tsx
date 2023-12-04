@@ -13,7 +13,7 @@ const Card = dynamic(() => import("./Card"), {
 
 export default function Page() {
   return (
-    <section>
+    <section className="flex flex-col items-center">
       {/** * Header ****/}
       <header>
         <h1 className="text-white font-semibold text-center text-4xl ">Password wallet manager</h1>
@@ -23,7 +23,7 @@ export default function Page() {
         </h2>
       </header>
       {/** * Form ****/}
-      <section>
+      <section className="flex flex-col max-w-md w-full">
         <article className="mt-10">
           <Form />
         </article>
@@ -40,8 +40,12 @@ export default function Page() {
         </details>
       </section>
       {/** * Cards ****/}
-      <section className="mt-10">
-        <Card />
+      <section className="mt-10 justify-items-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
+        <Card className="m-1" />
+        <Card className="m-1" />
+        <Card className="m-1" />
+        <Card className="m-1" />
+        <Card className="m-1" />
       </section>
     </section>
   )

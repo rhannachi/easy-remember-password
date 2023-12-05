@@ -2,10 +2,10 @@
 
 import { ChangeEvent, useEffect, useMemo, useState } from "react"
 import { hashCalculator, hashTransform, randomPassword } from "@/helpers"
-import Input from "@/components/Input"
-import Output from "@/components/Output"
+import InputCustom from "@/components/InputCustom"
 import Range from "@/components/Range"
 import Checkbox from "@/components/Checkbox"
+import Password from "@/components/Password"
 
 type WordHashType = {
   password: string
@@ -60,7 +60,7 @@ export default function Form() {
 
   return (
     <form className="flex flex-col mt-10 p-5 bg-[#C2EAFF] rounded-lg 2xl:mx-52">
-      <Input
+      <InputCustom
         value={password}
         maxLength={20}
         name="form-password-input"
@@ -71,7 +71,7 @@ export default function Form() {
 
       <div className="flex flex-col items-center">
         <span className="font-semibold text-xl text-blue-600 my-1 rotate-90 ">➤</span>
-        <Output label={hashTransformMemo} />
+        <Password label={hashTransformMemo} className="my-0.5 text-center" />
       </div>
 
       <div className="flex flex-col mt-2">

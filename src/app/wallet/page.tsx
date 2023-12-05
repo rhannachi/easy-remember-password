@@ -11,6 +11,11 @@ const Card = dynamic(() => import("./Card"), {
   loading: () => <p className="text-white">Loading...</p>,
   ssr: false,
 })
+const CardAdd = dynamic(() => import("@/components/CardAdd"), {
+  // TODO add loader ....
+  loading: () => <p className="text-white">Loading...</p>,
+  ssr: true,
+})
 
 const cards: CardType[] = [
   {
@@ -76,8 +81,11 @@ export default function Page() {
           </p>
         </details>
       </section>
+      <section className="my-10">
+        <CardAdd />
+      </section>
       {/** * Cards ****/}
-      <section className="mt-10 justify-items-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
+      <section className="justify-items-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
         {cards.map((card) => (
           <Card key={card.uuid} {...card} className="m-1" />
         ))}

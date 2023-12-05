@@ -1,12 +1,12 @@
 "use client"
 
-import ButtonIcon from "@/components/ButtonIcon"
-import Input from "@/components/Input"
+import InputCustom from "@/components/InputCustom"
 import Checkbox from "@/components/Checkbox"
 import Range from "@/components/Range"
 import Button from "@/components/Button"
 import clsx from "clsx"
 import { SyntheticEvent, useState } from "react"
+import Password from "@/components/Password"
 
 const INPUTS_NAME = [
   "site-url",
@@ -69,9 +69,11 @@ export default function Card({
   }
 
   return (
-    <article className={clsx("max-w-md shadow rounded bg-blue-600", className)}>
+    <article className={clsx("w-72 shadow rounded bg-blue-600", className)}>
       {/** * Header ****/}
-      <header className={clsx("flex flex-row items-center text-white h-14 p-2 justify-between")}>
+      <header
+        className={clsx("flex flex-row items-center text-white h-14 px-3 py-2 justify-between")}
+      >
         <div className="basis-1/3 text-lg">{state.link.split(".")[1]}</div>
         <div className="basis-1/3 text-sm ">{state.username}</div>
       </header>
@@ -81,7 +83,7 @@ export default function Card({
         onSubmit={handleSubmit}
         className="flex flex-col m-0.5 p-2 rounded-b bg-white"
       >
-        <Input
+        <InputCustom
           value={state.link}
           onChange={(e) =>
             setState((prevState) => ({
@@ -91,41 +93,23 @@ export default function Card({
           }
           placeholder="site url"
           name={`site-url-input-${uuid}`}
-          className=""
+          className=" my-0.5"
         />
-        <div className="flex flex-row">
-          <Input
-            value={state.username}
-            placeholder="username"
-            name={`username-input-${uuid}`}
-            className=" mt-1 mr-2"
-            onChange={(e) =>
-              setState((prevState) => ({
-                ...prevState,
-                username: e.target.value,
-              }))
-            }
-          />
-          <ButtonIcon name="copy-username-button" className="ml-1" svg="copy" size="w-5 h-5" />
-        </div>
-        <div className="flex flex-row">
-          <Input
-            defaultValue={password}
-            type="password"
-            placeholder="password"
-            name={`password-input-${uuid}`}
-            className="mt-1 mr-1"
-            autoComplete="off"
-            disabled
-          />
-          <ButtonIcon
-            name="regenerate-password-button"
-            className="mx-2"
-            svg="regenerate"
-            size="w-5 h-5"
-          />
-          <ButtonIcon name="copy-password-button" className="ml-1" svg="copy" size="w-5 h-5" />
-        </div>
+        <InputCustom
+          value={state.username}
+          suffixIcon="copy"
+          placeholder="username"
+          name={`username-input-${uuid}`}
+          className=" my-0.5"
+          onChange={(e) =>
+            setState((prevState) => ({
+              ...prevState,
+              username: e.target.value,
+            }))
+          }
+        />
+        <Password label={password} className="my-0.5" />
+
         {/** * CHECKBOX ****/}
         <div className="flex flex-row h-10 mt-1 mr-2">
           <Checkbox

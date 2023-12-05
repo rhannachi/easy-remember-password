@@ -11,7 +11,6 @@ import Password from "@/components/Password"
 const INPUTS_NAME = [
   "site-url",
   "username-input",
-  "password-input",
   "password-has-lowercase",
   "password-has-numeric",
   "password-has-uppercase",
@@ -57,7 +56,6 @@ export default function Card({
     const data: Record<InputNameType, string | boolean | number> = {
       "site-url": target[`site-url-input-${uuid}`].value,
       "username-input": target[`username-input-${uuid}`].value,
-      "password-input": target[`password-input-${uuid}`].value,
       "password-has-lowercase": target[`password-has-lowercase-checkbox-${uuid}`].checked,
       "password-has-numeric": target[`password-has-numeric-checkbox-${uuid}`].checked,
       "password-has-uppercase": target[`password-has-uppercase-checkbox-${uuid}`].checked,

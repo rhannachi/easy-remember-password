@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic"
 import { CardType } from "./Card"
+import Button from "@/components/Button"
 
 const Form = dynamic(() => import("./Form"), {
   // TODO add loader ....
@@ -63,23 +64,20 @@ export default function Page() {
           <strong>Générez</strong> et <strong>stockez tous vos mots de passe</strong> dans un seul
           endroit pratique à partir d&apos;une passphrase et d&apos;un mot de passe
         </h2>
+        {/* <p className="mt-10 text-justify text-white">*/}
+        {/*  Pour maximiser la sécurité, aucune de ces informations passphrase et mot de passe*/}
+        {/*  n&apos;est stockée sur le serveur.*/}
+        {/* </p>*/}
+        {/* <p className="text-justify text-white">*/}
+        {/*  Assurez-vous de mémoriser votre seed et la passphrase avec laquelle les mots de passe*/}
+        {/*  seront générés.*/}
+        {/* </p>*/}
       </header>
       {/** * Form ****/}
       <section className="flex flex-col max-w-md w-full">
         <article className="mt-10">
           <Form />
         </article>
-        <details className="text-white mt-2">
-          <summary className="font-semibold cursor-pointer">En savoir plus ?</summary>
-          <p className="text-justify font-normal">
-            Pour maximiser la sécurité, aucune de ces informations passphrase et mot de passe
-            n&apos;est stockée sur le serveur.
-          </p>
-          <p>
-            Assurez-vous de mémoriser votre seed et la passphrase avec laquelle les mots de passe
-            seront générés.
-          </p>
-        </details>
       </section>
       <section className="my-10">
         <CardAdd />

@@ -13,16 +13,16 @@ export default function CardAdd() {
   return (
     <>
       <Button
-        style="primary"
+        style="secondary"
         text="Ajouter un password"
-        className="px-6"
+        className="px-6 bg-white"
         name="add-password-button"
         onClick={() => setShowModal(true)}
       />
       <article
         className={clsx(
           showModal ? "block" : "hidden",
-          "shadow fixed z-10 pt-10 md:pt-64 left-0 top-0 w-full h-full overflow-auto bg-[rgba(0,0,0,0.7)]",
+          "shadow fixed z-10 pt-10 md:pt-64 left-0 top-0 w-full h-full overflow-auto bg-[rgba(0,0,0,0.9)]",
         )}
       >
         <div className="flex flex-col w-72 sm:w-80 bg-blue-600 m-auto px-1 pb-1 rounded ">

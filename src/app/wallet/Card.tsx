@@ -1,5 +1,6 @@
 "use client"
 
+import { PasswordType } from "@/pages/api/wallet"
 import InputCustom from "@/components/InputCustom"
 import Checkbox from "@/components/Checkbox"
 import Range from "@/components/Range"
@@ -19,16 +20,8 @@ const INPUTS_NAME = [
 ] as const
 type InputNameType = (typeof INPUTS_NAME)[number]
 
-export type CardType = {
-  uuid: string
-  link: string
-  username: string
+export type CardType = PasswordType & {
   password: string
-  hasNumeric: boolean
-  hasLowercase: boolean
-  hasUppercase: boolean
-  hasSymbol: boolean
-  length: number
 }
 
 export default function Card({
@@ -51,6 +44,7 @@ export default function Card({
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
+
     const target = e.target as typeof e.target &
       Record<`${InputNameType}-${string}`, { value: string; checked: boolean }>
     const data: Record<InputNameType, string | boolean | number> = {
@@ -76,11 +70,7 @@ export default function Card({
         <div className="basis-1/3 text-sm ">{state.username}</div>
       </header>
       {/** * FORM ****/}
-      <form
-        id={uuid}
-        onSubmit={handleSubmit}
-        className="flex flex-col m-0.5 p-2 rounded-b bg-white"
-      >
+      <form onSubmit={handleSubmit} className="flex flex-col m-0.5 p-2 rounded-b bg-white">
         <InputCustom
           value={state.link}
           onChange={(e) =>

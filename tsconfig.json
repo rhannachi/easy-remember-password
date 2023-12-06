@@ -12,7 +12,8 @@
       ]
     },
     "incremental": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "strictNullChecks": true
   },
   "include": [
     "next-env.d.ts",

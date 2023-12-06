@@ -80,12 +80,17 @@ export const hashTransform = ({
   return hash
 }
 
+// export const isServer = () => typeof window === "undefined"
+
 // ******************************************************** //
 
 import * as bip39 from "bip39"
 import HdKey from "hdkey"
 
-const generateWallet = async (passphrase: string, password: string): Promise<HdKey | void> => {
+export const generateWallet = async (
+  passphrase: string,
+  password: string,
+): Promise<HdKey | void> => {
   try {
     const hash = await digestSha256(`${passphrase.trim()}${password.trim()}`)
     if (!hash) return

@@ -1,6 +1,11 @@
+"use client"
+
 import dynamic from "next/dynamic"
-import { CardType } from "./Card"
-import Button from "@/components/Button"
+import type { CardType } from "./Card"
+import { useState } from "react"
+import HDNode from "hdkey"
+import { PasswordType } from "@/pages/api/wallet"
+import { generateWallet } from "@/helpers"
 
 const Form = dynamic(() => import("./Form"), {
   // TODO add loader ....
@@ -12,49 +17,59 @@ const Card = dynamic(() => import("./Card"), {
   loading: () => <p className="text-white">Loading...</p>,
   ssr: false,
 })
-const CardAdd = dynamic(() => import("@/components/CardAdd"), {
-  // TODO add loader ....
-  loading: () => <p className="text-white">Loading...</p>,
-  ssr: true,
-})
-
-const cards: CardType[] = [
-  {
-    uuid: "2346123", // click sur g ou création new card
-    link: "www.facebook.com",
-    username: "rhannachi",
-    password: "bla bla bla",
-    hasNumeric: true,
-    hasLowercase: true,
-    hasUppercase: true,
-    hasSymbol: true,
-    length: 15,
-  },
-  {
-    uuid: "2678SFGS", // click sur g ou création new card
-    link: "www.facebook.com",
-    username: "rhannachi",
-    password: "bla bla bla",
-    hasNumeric: true,
-    hasLowercase: true,
-    hasUppercase: true,
-    hasSymbol: true,
-    length: 15,
-  },
-  {
-    uuid: "54GGGGSZGR", // click sur g ou création new card
-    link: "www.facebook.com",
-    username: "rhannachi",
-    password: "bla bla bla",
-    hasNumeric: true,
-    hasLowercase: true,
-    hasUppercase: true,
-    hasSymbol: true,
-    length: 15,
-  },
-]
+// const CardAdd = dynamic(() => import("@/components/CardAdd"), {
+//   // TODO add loader ....
+//   loading: () => <p className="text-white">Loading...</p>,
+//   ssr: true,
+// })
 
 export default function Page() {
+  const [state, setState] = useState<{
+    wallet?: HDNode
+    passwordList?: PasswordType[]
+    cardList?: CardType[]
+  }>({})
+
+  const fetchData = async (publicExtendedKey: string): Promise<PasswordType[]> => {
+    try {
+      const response = await fetch("/api/wallet", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ publicExtendedKey: publicExtendedKey }),
+      }).then((response) => response.json())
+
+      return response.passwordList
+    } catch (e) {
+      console.error(`${e}`)
+      throw e
+    }
+  }
+
+  const handleSubmit = async (passphrase: string, password: string) => {
+    const wallet = await generateWallet(passphrase, password)
+    if (!wallet) return
+
+    const passwordList = await fetchData(wallet.publicExtendedKey)
+
+    if (passwordList) {
+      const cardList: CardType[] = passwordList.map((password: PasswordType) => {
+        return {
+          ...password,
+          password: wallet.derive(password.uuid).publicExtendedKey.split("").reverse().join(""),
+        }
+      })
+
+      setState((prevState) => ({
+        ...prevState,
+        wallet,
+        passwordList,
+        cardList,
+      }))
+    }
+  }
+
   return (
     <section className="flex flex-col items-center">
       {/** * Header ****/}
@@ -76,18 +91,26 @@ export default function Page() {
       {/** * Form ****/}
       <section className="flex flex-col max-w-md w-full">
         <article className="mt-10">
-          <Form />
+          <Form handleSubmit={handleSubmit} />
         </article>
       </section>
-      <section className="my-10">
-        <CardAdd />
-      </section>
+      {/* <section className="my-10">*/}
+      {/*  <CardAdd />*/}
+      {/* </section>*/}
       {/** * Cards ****/}
-      <section className="justify-items-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
-        {cards.map((card) => (
-          <Card key={card.uuid} {...card} className="m-1" />
-        ))}
-      </section>
+      <div className="my-10">
+        {!state.cardList ? (
+          <p className="text-white text-justify">
+            Votre wallet est vide, veuillez ajouter votre premier mot de passe
+          </p>
+        ) : (
+          <section className="justify-items-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
+            {state.cardList.map((card) => (
+              <Card key={card.uuid} {...card} className="m-1" />
+            ))}
+          </section>
+        )}
+      </div>
     </section>
   )
 }

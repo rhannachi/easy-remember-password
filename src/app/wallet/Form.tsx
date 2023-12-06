@@ -31,6 +31,7 @@ export default function Form({ handleSubmit }: FormProps) {
     <form onSubmit={onSubmit} className="flex flex-col">
       <Input
         label="Passphrase:"
+        // minLength={6}
         maxLength={20}
         name="passphrase"
         type="password"
@@ -39,6 +40,7 @@ export default function Form({ handleSubmit }: FormProps) {
       <Input
         label="Password:"
         className="mt-3"
+        // minLength={6}
         maxLength={20}
         name="password"
         type="password"

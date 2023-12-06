@@ -42,31 +42,34 @@ export default function Page() {
 
       return response.passwordList
     } catch (e) {
-      console.error(`${e}`)
-      throw e
+      throw new Error(`${e}`)
     }
   }
 
   const handleSubmit = async (passphrase: string, password: string) => {
-    const wallet = await generateWallet(passphrase, password)
-    if (!wallet) return
+    try {
+      const wallet = await generateWallet(passphrase, password)
+      if (!wallet) return
 
-    const passwordList = await fetchData(wallet.publicExtendedKey)
+      const passwordList = await fetchData(wallet.publicExtendedKey)
 
-    if (passwordList) {
-      const cardList: CardType[] = passwordList.map((password: PasswordType) => {
-        return {
-          ...password,
-          password: wallet.derive(password.uuid).publicExtendedKey.split("").reverse().join(""),
-        }
-      })
+      if (passwordList.length) {
+        const cardList: CardType[] = passwordList.map((password: PasswordType) => {
+          return {
+            ...password,
+            password: wallet.derive(password.uuid).publicExtendedKey.split("").reverse().join(""),
+          }
+        })
 
-      setState((prevState) => ({
-        ...prevState,
-        wallet,
-        passwordList,
-        cardList,
-      }))
+        setState((prevState) => ({
+          ...prevState,
+          wallet,
+          passwordList,
+          cardList,
+        }))
+      }
+    } catch (e) {
+      console.error(`${e}`)
     }
   }
 

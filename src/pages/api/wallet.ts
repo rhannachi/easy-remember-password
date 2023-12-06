@@ -11,6 +11,11 @@ export type PasswordType = {
   length: number
 }
 
+type WalletType = {
+  publicExtendedKey: string
+  passwordList: PasswordType[]
+}
+
 const passwordList: PasswordType[] = [
   {
     uuid: "m/0",
@@ -44,9 +49,24 @@ const passwordList: PasswordType[] = [
   },
 ]
 
+const wallet: WalletType[] = [
+  {
+    // ramzi . ramzi
+    publicExtendedKey:
+      "xpub661MyMwAqRbcG43HkAorZ21tGpUfsrchZhMMCXmiZ3hj9sdPhdPsoAwvJwo7XqZK8YynXnShmNbpCCaXPRFrndMZgXSLfHzmw24GN6eFdkV",
+    passwordList,
+  },
+]
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { publicExtendedKey } = req.body
   console.log({ publicExtendedKey })
 
-  res.status(200).json({ passwordList })
+  const walletItem = wallet.find((item) => item.publicExtendedKey === publicExtendedKey)
+
+  if (!walletItem) {
+    return res.status(200).json({ passwordList: [] })
+  }
+
+  res.status(200).json({ passwordList: walletItem.passwordList })
 }

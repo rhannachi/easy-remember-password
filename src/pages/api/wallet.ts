@@ -58,15 +58,19 @@ const wallet: WalletType[] = [
   },
 ]
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { publicExtendedKey } = req.body
-  console.log({ publicExtendedKey })
+export default async function login(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const { publicExtendedKey } = req.body
+    console.log({ publicExtendedKey })
 
-  const walletItem = wallet.find((item) => item.publicExtendedKey === publicExtendedKey)
+    const walletItem = wallet.find((item) => item.publicExtendedKey === publicExtendedKey)
 
-  if (!walletItem) {
-    return res.status(200).json({ passwordList: [] })
+    if (!walletItem) {
+      return res.status(403).json({ status: 403, error: "Passphrase ou password incorrect" })
+    }
+
+    res.status(200).json({ passwordList: walletItem.passwordList })
+  } catch (e) {
+    return res.status(500).json({ status: 500, error: "Un problème est survenu" })
   }
-
-  res.status(200).json({ passwordList: walletItem.passwordList })
 }

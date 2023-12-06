@@ -3,75 +3,93 @@
 import dynamic from "next/dynamic"
 import type { CardType } from "./Card"
 import { useState } from "react"
-import HDNode from "hdkey"
-import { PasswordType } from "@/pages/api/wallet"
-import { generateWallet } from "@/helpers"
+import { generateHdKey } from "@/helpers"
+import { ErrorApi, loginApi } from "@/services/wallet.service"
+import { cardListTransformer } from "@/app/wallet/page.transformer"
+import HdKey from "hdkey"
 
 const Form = dynamic(() => import("./Form"), {
-  // TODO add loader ....
   loading: () => <p className="text-white">Loading...</p>,
   ssr: false,
 })
 const Card = dynamic(() => import("./Card"), {
-  // TODO add loader ....
   loading: () => <p className="text-white">Loading...</p>,
   ssr: false,
 })
-// const CardAdd = dynamic(() => import("@/components/CardAdd"), {
-//   // TODO add loader ....
-//   loading: () => <p className="text-white">Loading...</p>,
-//   ssr: true,
-// })
+
+type StateTypes = {
+  hdKey?: HdKey
+  cardList?: CardType[]
+  login: {
+    status?: number
+    isLoading?: boolean
+    error?: string
+  }
+}
 
 export default function Page() {
-  const [state, setState] = useState<{
-    wallet?: HDNode
-    passwordList?: PasswordType[]
-    cardList?: CardType[]
-  }>({})
-
-  const fetchData = async (publicExtendedKey: string): Promise<PasswordType[]> => {
-    try {
-      const response = await fetch("/api/wallet", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ publicExtendedKey: publicExtendedKey }),
-      }).then((response) => response.json())
-
-      return response.passwordList
-    } catch (e) {
-      throw new Error(`${e}`)
-    }
-  }
+  const [state, setState] = useState<StateTypes>({
+    hdKey: undefined,
+    cardList: undefined,
+    login: {
+      error: undefined,
+      status: undefined,
+      isLoading: false,
+    },
+  })
 
   const handleSubmit = async (passphrase: string, password: string) => {
     try {
-      const wallet = await generateWallet(passphrase, password)
-      if (!wallet) return
+      setState({
+        hdKey: undefined,
+        cardList: undefined,
+        login: {
+          error: undefined,
+          status: undefined,
+          isLoading: true,
+        },
+      })
 
-      const passwordList = await fetchData(wallet.publicExtendedKey)
+      const hdKey = await generateHdKey(passphrase, password)
+      if (!hdKey) return
+      const passwordList = await loginApi(hdKey.publicExtendedKey)
+      const cardList = cardListTransformer(hdKey, passwordList)
 
-      if (passwordList.length) {
-        const cardList: CardType[] = passwordList.map((password: PasswordType) => {
-          return {
-            ...password,
-            password: wallet.derive(password.uuid).publicExtendedKey.split("").reverse().join(""),
-          }
-        })
-
-        setState((prevState) => ({
-          ...prevState,
-          wallet,
-          passwordList,
-          cardList,
-        }))
-      }
+      setState({
+        hdKey,
+        cardList,
+        login: {
+          error: undefined,
+          status: 200,
+          isLoading: false,
+        },
+      })
     } catch (e) {
-      console.error(`${e}`)
+      let error = "Un problème est survenu"
+      let status = 500
+      if (e instanceof ErrorApi) {
+        status = e.status
+        error = e.error
+      }
+      setState({
+        hdKey: undefined,
+        cardList: undefined,
+        login: {
+          error,
+          status,
+          isLoading: false,
+        },
+      })
     }
   }
+
+  const isLoading = state && state?.login.isLoading
+  const invalidCredential =
+    !isLoading && state?.login.status === 403 ? state?.login.error : undefined
+  const unknownError =
+    !isLoading && state?.login.status !== 200 && state?.login.status !== 403
+      ? state?.login.error
+      : undefined
 
   return (
     <section className="flex flex-col items-center">
@@ -94,19 +112,19 @@ export default function Page() {
       {/** * Form ****/}
       <section className="flex flex-col max-w-md w-full">
         <article className="mt-10">
-          <Form handleSubmit={handleSubmit} />
+          <Form
+            isLoading={isLoading}
+            error={invalidCredential || unknownError}
+            handleSubmit={handleSubmit}
+          />
         </article>
       </section>
       {/* <section className="my-10">*/}
       {/*  <CardAdd />*/}
       {/* </section>*/}
       {/** * Cards ****/}
-      <div className="my-10">
-        {!state.cardList ? (
-          <p className="text-white text-justify">
-            Votre wallet est vide, veuillez ajouter votre premier mot de passe
-          </p>
-        ) : (
+      <div className="my-10 text-white">
+        {state && state.cardList && (
           <section className="justify-items-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
             {state.cardList.map((card) => (
               <Card key={card.uuid} {...card} className="m-1" />

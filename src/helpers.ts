@@ -87,7 +87,11 @@ export const hashTransform = ({
 import * as bip39 from "bip39"
 import HdKey from "hdkey"
 
-export const generateWallet = async (
+export const generatePassword = (hdKey: HdKey, uuid: string): string => {
+  return hdKey.derive(uuid).publicExtendedKey.split("").reverse().join("")
+}
+
+export const generateHdKey = async (
   passphrase: string,
   password: string,
 ): Promise<HdKey | void> => {
@@ -147,7 +151,7 @@ const verify = async ({
 }
 
 export const main = async () => {
-  const wallet = await generateWallet("ramzi hannachi 123 123", "123 123")
+  const wallet = await generateHdKey("ramzi hannachi 123 123", "123 123")
   if (!wallet) return
 
   const publicExtendedKey = wallet.publicExtendedKey

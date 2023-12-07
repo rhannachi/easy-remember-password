@@ -145,20 +145,12 @@ export default function Card({
           }
         />
         <div className="flex flex-row justify-end mt-5 items-center">
-          <Button
-            style="warning"
-            text="Supprimer"
-            name="remove-form-button"
-            type="button"
-            className="w-full mr-1"
-          />
-          <Button
-            style="primary"
-            text="Valider"
-            name="submit-form-button"
-            type="submit"
-            className="w-full ml-1"
-          />
+          <Button style="warning" name="remove-form-button" type="button" className="w-full mr-1">
+            Supprimer
+          </Button>
+          <Button style="primary" name="submit-form-button" type="submit" className="w-full ml-1">
+            Valider
+          </Button>
         </div>
       </form>
     </article>

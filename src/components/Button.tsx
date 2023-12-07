@@ -2,17 +2,18 @@ import clsx from "clsx"
 import { ButtonHTMLAttributes } from "react"
 
 export default function Button({
-  text,
   isLoading,
   style = "primary",
+  children,
   className,
   ...props
-}: ButtonHTMLAttributes<HTMLButtonElement> & {
-  text: string
-  isLoading?: boolean
-  style?: "primary" | "secondary" | "warning"
-}) {
-  const primaryClassName = "text-white border-0 bg-[#2872EC]" //  bg-blue-600
+}: React.PropsWithChildren<
+  ButtonHTMLAttributes<HTMLButtonElement> & {
+    isLoading?: boolean
+    style?: "primary" | "secondary" | "warning"
+  }
+>) {
+  const primaryClassName = "text-white border-2 border-[#2872EC] bg-[#2872EC]" //  bg-blue-600
   const secondaryClassName = "border-2 border-blue-600 text-blue-600"
   const warningClassName = "border-2 border-red-600 text-red-600"
 
@@ -23,8 +24,8 @@ export default function Button({
       disabled={isLoading}
       role="button"
       className={clsx(
-        "rounded h-9 py-1 text-md",
         className,
+        "rounded py-1 text-md",
         props.disabled && "bg-gray-400",
         style === "secondary"
           ? secondaryClassName
@@ -55,7 +56,7 @@ export default function Button({
           </svg>
         </div>
       ) : (
-        text
+        children
       )}
     </button>
   )

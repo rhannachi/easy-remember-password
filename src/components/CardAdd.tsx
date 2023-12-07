@@ -14,11 +14,12 @@ export default function CardAdd() {
     <>
       <Button
         style="secondary"
-        text="Ajouter un password"
         className="px-6 bg-white"
         name="add-password-button"
         onClick={() => setShowModal(true)}
-      />
+      >
+        Ajouter un password
+      </Button>
       <article
         className={clsx(
           showModal ? "block" : "hidden",
@@ -95,11 +96,12 @@ export default function CardAdd() {
             <div className="flex flex-row justify-end mt-5 items-center">
               <Button
                 style="primary"
-                text="Valider"
                 name="submit-form-button"
                 type="submit"
                 className="w-full ml-1"
-              />
+              >
+                Valider
+              </Button>
             </div>
           </form>
         </div>

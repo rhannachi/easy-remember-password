@@ -85,10 +85,11 @@ export default function Form({ isLoading, error, handleSubmit }: FormProps) {
         disabled={!isFormValidMemo}
         isLoading={isLoading}
         type="submit"
-        text="Accéder à mon Wallet"
         className="w-full mt-5"
-      />
-      <div className="mt-5 text-center text-red-500 ">{error && <span>{error}</span>}</div>
+      >
+        Accéder à mon Wallet
+      </Button>
+      {error && <div className="mt-5 text-center text-red-500 ">{error}</div>}
     </form>
   )
 }

@@ -2,11 +2,13 @@
 
 import dynamic from "next/dynamic"
 import type { CardType } from "./Card"
-import { useState } from "react"
+import React from "react"
 import { generateHdKey } from "@/helpers"
 import { ErrorApi, loginApi } from "@/services/wallet.service"
 import { cardListTransformer } from "@/app/wallet/page.transformer"
 import HdKey from "hdkey"
+import ButtonIcon from "@/components/ButtonIcon"
+import Button from "@/components/Button"
 
 const Form = dynamic(() => import("./Form"), {
   loading: () => <p className="text-white">Loading...</p>,
@@ -28,7 +30,7 @@ type StateTypes = {
 }
 
 export default function Page() {
-  const [state, setState] = useState<StateTypes>({
+  const [state, setState] = React.useState<StateTypes>({
     hdKey: undefined,
     cardList: undefined,
     login: {
@@ -110,21 +112,42 @@ export default function Page() {
         {/* </p>*/}
       </header>
       {/** * Form ****/}
-      <section className="flex flex-col max-w-md w-full">
-        <article className="mt-10">
-          <Form
-            isLoading={isLoading}
-            error={invalidCredential || unknownError}
-            handleSubmit={handleSubmit}
-          />
-        </article>
+      {!state.hdKey && (
+        <section className="flex flex-col max-w-md w-full mt-10">
+          <article>
+            <Form
+              isLoading={isLoading}
+              error={invalidCredential || unknownError}
+              handleSubmit={handleSubmit}
+            />
+          </article>
+        </section>
+      )}
+      <section className="flex h-10 mt-10 max-w-md">
+        {state.hdKey && (
+          <Button style="secondary" className="px-10 text-white border-white">
+            <div className="flex flex-row items-center justify-between">
+              <div className="mr-2">Ajouter un password</div>
+              <svg
+                className="h-6 w-6 fill-white"
+                fill="none"
+                viewBox="0 0 25 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g>
+                  <path d="m8.25864 21.2453c.64697-.647 1.01864-1.4729 1.115-2.3264.13077-1.1356-.24778-2.3126-1.115-3.1798-.5162-.5162-1.14941-.8603-1.81703-1.0186-1.2733-.3235-2.68425.0137-3.68913 1.0186-.69515.6952-1.0737 1.583-1.12188 2.4984-.03441.3923 0 .7984.10325 1.1907.1583.6677.50243 1.3009 1.01863 1.8171 1.52108 1.521 3.98508 1.521 5.50616 0zm-1.29395-3.4689c.3992 0 .72957.3304.72957.7296-.00688.406-.33037.7295-.73645.7364l-.72268-.0069.00688.6952c-.00688.4061-.33037.7295-.73645.7364-.40608-.0069-.72956-.3304-.73645-.7364l.00689-.6952-.72269.0069c-.40608-.0069-.72956-.3304-.73645-.7364.00689-.1996.08948-.3786.22025-.5094.13077-.1307.30972-.2133.50932-.2202h.72957v-.7571c0-.2065.08259-.3854.21336-.5162s.30972-.2134.5162-.2134c.3992 0 .72957.3304.72957.7296v.7571z" />
+                  <path d="m15.0952 3.84548v3.69877h-1.46v-3.69877c0-.26281-.2336-.38935-.3894-.38935-.0486 0-.0973.00974-.146.0292l-7.71872 2.91035c-.51588.19467-.84682.68135-.84682 1.23617v.65215c-.88576.66189-1.46004 1.7228-1.46004 2.9201v-3.57225c0-1.1583.71055-2.19006 1.79098-2.59887l7.7285-2.92008c.2141-.07787.438-.11681.6521-.11681.9734 0 1.8494.78843 1.8494 1.84939z" />
+                  <path d="m21.5691 14.1156v.9733c0 .2629-.2044.477-.477.4867h-1.4211c-.5159 0-.9831-.3796-1.022-.8857-.0292-.3018.0876-.584.2823-.7787.1752-.185.4185-.2823.6813-.2823h1.4698c.2823.0097.4867.2239.4867.4867z" />
+                  <path d="m19.6019 12.6044h.9928c.5354 0 .9734-.438.9734-.9733v-.4283c0-2.01485-1.645-3.65983-3.6599-3.65983h-11.17415c-.82735 0-1.58657.27254-2.19979.73975-.88576.66189-1.46004 1.72288-1.46004 2.92008v1.7326c0 .3699.38934.6035.73975.4867.54508-.185 1.11937-.2823 1.69365-.2823 2.94928 0 5.35348 2.4042 5.35348 5.3535 0 .7008-.1849 1.4697-.4769 2.1511-.1558.3504.0876.769.4672.769h7.0568c2.0149 0 3.6599-1.645 3.6599-3.6599v-.1849c0-.5354-.438-.9734-.9734-.9734h-.8468c-.9344 0-1.8299-.5743-2.0733-1.4795-.1947-.7397.039-1.46.5256-1.9272.3602-.3699.8566-.5841 1.4017-.5841zm-5.334-.1946h-4.86684c-.39908 0-.73002-.331-.73002-.7301 0-.399.33094-.73.73002-.73h4.86684c.399 0 .73.331.73.73 0 .3991-.331.7301-.73.7301z" />
+                </g>
+              </svg>
+            </div>
+          </Button>
+        )}
       </section>
-      {/* <section className="my-10">*/}
-      {/*  <CardAdd />*/}
-      {/* </section>*/}
       {/** * Cards ****/}
       <div className="my-10 text-white">
-        {state && state.cardList && (
+        {state.cardList && (
           <section className="justify-items-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
             {state.cardList.map((card) => (
               <Card key={card.uuid} {...card} className="m-1" />

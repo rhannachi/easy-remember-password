@@ -3,11 +3,10 @@
 import dynamic from "next/dynamic"
 import type { CardType } from "./Card"
 import React from "react"
-import { generateHdKey } from "@/helpers"
+import { generateHdKey, generatePassword, generatePath } from "@/helpers"
 import { ErrorApi, loginApi } from "@/services/wallet.service"
 import { cardListTransformer } from "@/app/wallet/page.transformer"
 import HdKey from "hdkey"
-import ButtonIcon from "@/components/ButtonIcon"
 import Button from "@/components/Button"
 
 const Form = dynamic(() => import("./Form"), {
@@ -85,6 +84,50 @@ export default function Page() {
     }
   }
 
+  const addCardList = () => {
+    setState((prevState) => {
+      if (!prevState.hdKey) return prevState
+
+      const defaultObject = {
+        link: "",
+        username: "",
+        length: 15,
+        hasUppercase: true,
+        hasLowercase: true,
+        hasNumeric: true,
+        hasSymbol: true,
+      }
+
+      const uuid = generatePath()
+
+      const password = generatePassword(prevState.hdKey, uuid)
+
+      if (!prevState.cardList?.length) {
+        return {
+          ...prevState,
+          cardList: [
+            {
+              uuid,
+              password,
+              ...defaultObject,
+            },
+          ],
+        }
+      }
+      return {
+        ...prevState,
+        cardList: [
+          {
+            uuid,
+            password,
+            ...defaultObject,
+          },
+          ...prevState.cardList,
+        ],
+      }
+    })
+  }
+
   const isLoading = state && state?.login.isLoading
   const invalidCredential =
     !isLoading && state?.login.status === 403 ? state?.login.error : undefined
@@ -125,7 +168,7 @@ export default function Page() {
       )}
       <section className="flex h-10 mt-10 max-w-md">
         {state.hdKey && (
-          <Button style="secondary" className="px-10 text-white border-white">
+          <Button onClick={addCardList} style="secondary" className="px-10 text-white border-white">
             <div className="flex flex-row items-center justify-between">
               <div className="mr-2">Ajouter un password</div>
               <svg

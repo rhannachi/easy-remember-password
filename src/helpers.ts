@@ -91,6 +91,17 @@ export const generatePassword = (hdKey: HdKey, uuid: string): string => {
   return hdKey.derive(uuid).publicExtendedKey.split("").reverse().join("")
 }
 
+export const generatePath = () => {
+  const [random1, random2] = window.crypto.getRandomValues(new Uint32Array(2))
+
+  const coinType = Math.round(Math.random()) === 0 ? "0" : "60" // 0 (Btc) or 60 (Ether)
+  const account = `${random1}`.slice(0, 9)
+  const change = Math.round(Math.random()) // 0 or 1
+  const addressIndex = `${random2}`.slice(0, 9)
+
+  return `m/44/${coinType}/${account}/${change}/${addressIndex}`
+}
+
 export const generateHdKey = async (
   passphrase: string,
   password: string,

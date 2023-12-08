@@ -8,6 +8,7 @@ import Checkbox from "@/components/Checkbox"
 import Range from "@/components/Range"
 import Button from "@/components/Button"
 import Password from "@/components/Password"
+import { ResponseApiType } from "@/app/wallet/page"
 
 export type CardType = Omit<WalletType, "path"> & {
   uuid: string
@@ -27,9 +28,14 @@ export default function Card({
   link,
   length,
   password,
-  className,
   handleSubmit,
-}: CardType & { handleSubmit: (walletItem: WalletType) => void; className?: string }) {
+  addWalletItemApi,
+  className,
+}: CardType & {
+  addWalletItemApi: ResponseApiType
+  handleSubmit: (walletItem: WalletType) => void
+  className?: string
+}) {
   const [state, setState] = React.useState<Pick<CardType, "length" | "link" | "username">>({
     length,
     link,
@@ -151,7 +157,13 @@ export default function Card({
           <Button style="warning" name="remove-form-button" type="button" className="w-full mr-1">
             Supprimer
           </Button>
-          <Button style="primary" name="submit-form-button" type="submit" className="w-full ml-1">
+          <Button
+            isLoading={addWalletItemApi.isLoading}
+            style="primary"
+            name="submit-form-button"
+            type="submit"
+            className="w-full ml-1"
+          >
             Valider
           </Button>
         </div>

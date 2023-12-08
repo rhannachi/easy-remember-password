@@ -10,7 +10,7 @@ export class ErrorApi extends Error {
   }
 }
 
-export const fetchApi = async (publicExtendedKey: string): Promise<WalletType[]> => {
+export const fetchWalletApi = async (publicExtendedKey: string): Promise<WalletType[]> => {
   try {
     const response = await fetch("/api/wallet", {
       method: "POST",
@@ -32,8 +32,7 @@ export const fetchApi = async (publicExtendedKey: string): Promise<WalletType[]>
   }
 }
 
-type CreateApiType = (walletItem: WalletType) => Promise<WalletType>
-export const createApi: CreateApiType = async (walletItem) => {
+export const addWalletItemApi = async (walletItem: WalletType): Promise<WalletType> => {
   try {
     const response = await fetch("/api/wallet/create", {
       method: "POST",

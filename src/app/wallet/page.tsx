@@ -1,14 +1,13 @@
 "use client"
 
 import dynamic from "next/dynamic"
-import type { CardType } from "./Card"
 import React from "react"
 import { generateHdKey, generatePassword, generatePath } from "@/helpers"
 import { addWalletItemApi, ErrorApi, fetchWalletApi } from "./wallet.service"
 import { cardsMapper } from "@/app/wallet/page.transformer"
-import HdKey from "hdkey"
 import Button from "@/components/Button"
 import type { WalletType } from "@/type"
+import type { StateTypes } from "./type"
 
 const Form = dynamic(() => import("./Form"), {
   loading: () => <p className="text-white">Loading...</p>,
@@ -19,34 +18,8 @@ const Card = dynamic(() => import("./Card"), {
   ssr: false,
 })
 
-export type ResponseApiType = {
-  status?: number
-  isLoading?: boolean
-  error?: string
-}
-
-type StateTypes = {
-  hdKey?: HdKey
-  cards?: CardType[]
-  fetchWalletApi: ResponseApiType
-  addWalletItemApi: ResponseApiType
-}
-
 export default function Page() {
-  const [state, setState] = React.useState<StateTypes>({
-    hdKey: undefined,
-    cards: undefined,
-    addWalletItemApi: {
-      status: undefined,
-      error: undefined,
-      isLoading: false,
-    },
-    fetchWalletApi: {
-      status: undefined,
-      error: undefined,
-      isLoading: false,
-    },
-  })
+  const [state, setState] = React.useState<StateTypes>()
 
   const fetchWalletHandler = async (passphrase: string, password: string) => {
     try {
@@ -98,7 +71,7 @@ export default function Page() {
 
   const addCard = () => {
     setState((prevState) => {
-      if (!prevState.hdKey) return prevState
+      if (!prevState?.hdKey) return prevState
 
       const defaultObject = {
         link: "",
@@ -143,22 +116,38 @@ export default function Page() {
     try {
       setState((prevState) => ({
         ...prevState,
-        addWalletItemApi: {
-          error: undefined,
-          status: undefined,
-          isLoading: true,
-        },
+        cards: prevState?.cards?.map((item) => {
+          if (item.uuid === walletItem.path) {
+            return {
+              ...item,
+              addWalletItemApi: {
+                error: undefined,
+                status: undefined,
+                isLoading: true,
+              },
+            }
+          }
+          return item
+        }),
       }))
 
       await addWalletItemApi(walletItem)
 
       setState((prevState) => ({
         ...prevState,
-        addWalletItemApi: {
-          error: undefined,
-          status: 200,
-          isLoading: false,
-        },
+        cards: prevState?.cards?.map((item) => {
+          if (item.uuid === walletItem.path) {
+            return {
+              ...item,
+              addWalletItemApi: {
+                error: undefined,
+                status: 200,
+                isLoading: false,
+              },
+            }
+          }
+          return item
+        }),
       }))
     } catch (e) {
       let error = "Un problème est survenu"
@@ -169,23 +158,29 @@ export default function Page() {
       }
       setState((prevState) => ({
         ...prevState,
-        hdKey: undefined,
-        cards: undefined,
-        addWalletItemApi: {
-          error,
-          status,
-          isLoading: false,
-        },
+        cards: prevState?.cards?.map((item) => {
+          if (item.uuid === walletItem.path) {
+            return {
+              ...item,
+              addWalletItemApi: {
+                error,
+                status,
+                isLoading: false,
+              },
+            }
+          }
+          return item
+        }),
       }))
     }
   }
 
-  const isLoading = state && state?.fetchWalletApi.isLoading
+  const isLoading = state && state?.fetchWalletApi?.isLoading
   const invalidCredential =
-    !isLoading && state?.fetchWalletApi.status === 403 ? state?.fetchWalletApi.error : undefined
+    !isLoading && state?.fetchWalletApi?.status === 403 ? state?.fetchWalletApi.error : undefined
   const unknownError =
-    !isLoading && state?.fetchWalletApi.status !== 200 && state?.fetchWalletApi.status !== 403
-      ? state?.fetchWalletApi.error
+    !isLoading && state?.fetchWalletApi?.status !== 200 && state?.fetchWalletApi?.status !== 403
+      ? state?.fetchWalletApi?.error
       : undefined
 
   return (
@@ -207,7 +202,7 @@ export default function Page() {
         {/* </p>*/}
       </header>
       {/** * Form ****/}
-      {!state.hdKey && (
+      {!state?.hdKey && (
         <section className="flex flex-col max-w-md w-full mt-10">
           <article>
             <Form
@@ -219,7 +214,7 @@ export default function Page() {
         </section>
       )}
       <section className="flex h-10 mt-10 max-w-md">
-        {state.hdKey && (
+        {state?.hdKey && (
           <Button onClick={addCard} style="secondary" className="px-10 text-white border-white">
             <div className="flex flex-row items-center justify-between">
               <div className="mr-2">Ajouter un password</div>
@@ -242,16 +237,10 @@ export default function Page() {
       </section>
       {/** * Cards ****/}
       <div className="my-10 text-white">
-        {state.cards && (
+        {state?.cards && (
           <section className="justify-items-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
             {state.cards.map((card) => (
-              <Card
-                {...card}
-                key={card.uuid}
-                addWalletItemApi={state.addWalletItemApi}
-                handleSubmit={addCardSubmitHandler}
-                className="m-1"
-              />
+              <Card {...card} key={card.uuid} handleSubmit={addCardSubmitHandler} className="m-1" />
             ))}
           </section>
         )}

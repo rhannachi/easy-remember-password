@@ -8,12 +8,7 @@ import Checkbox from "@/components/Checkbox"
 import Range from "@/components/Range"
 import Button from "@/components/Button"
 import Password from "@/components/Password"
-import { ResponseApiType } from "@/app/wallet/page"
-
-export type CardType = Omit<WalletType, "path"> & {
-  uuid: string
-  password: string
-}
+import type { CardType } from "./type"
 
 const getFormElement = (fieldName: string, e: React.FormEvent<HTMLFormElement>) =>
   e.currentTarget.elements.namedItem(fieldName) as HTMLInputElement
@@ -32,7 +27,6 @@ export default function Card({
   addWalletItemApi,
   className,
 }: CardType & {
-  addWalletItemApi: ResponseApiType
   handleSubmit: (walletItem: WalletType) => void
   className?: string
 }) {
@@ -53,6 +47,7 @@ export default function Card({
     const hasSymbol = getFormElement(`has-symbol-${uuid}`, e).checked
     const length = Number(getFormElement(`length-${uuid}`, e).value)
 
+    // todo add function validation
     if (!link || !username) return
 
     const walletItem: WalletType = {
@@ -158,7 +153,7 @@ export default function Card({
             Supprimer
           </Button>
           <Button
-            isLoading={addWalletItemApi.isLoading}
+            isLoading={addWalletItemApi?.isLoading}
             style="primary"
             name="submit-form-button"
             type="submit"

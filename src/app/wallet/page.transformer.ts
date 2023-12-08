@@ -1,15 +1,30 @@
-import type { CardType } from "@/app/wallet/Card"
 import type { WalletType } from "@/type"
 import { generatePassword } from "@/helpers"
 import HdKey from "hdkey"
+import type { CardType } from "./type"
 
 export const cardsMapper = (hdKey: HdKey, wallet: WalletType[]): CardType[] =>
   wallet.map(cardMapper(hdKey))
 
 const cardMapper =
   (hdKey: HdKey) =>
-  (walletItem: WalletType): CardType => ({
-    ...walletItem,
-    uuid: walletItem.path,
-    password: generatePassword(hdKey, walletItem.path),
+  ({
+    link,
+    path,
+    hasNumeric,
+    hasSymbol,
+    hasUppercase,
+    hasLowercase,
+    username,
+    length,
+  }: WalletType): CardType => ({
+    link,
+    hasLowercase,
+    hasNumeric,
+    hasSymbol,
+    hasUppercase,
+    length,
+    username,
+    uuid: path,
+    password: generatePassword(hdKey, path),
   })

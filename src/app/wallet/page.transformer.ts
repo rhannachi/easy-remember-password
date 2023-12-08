@@ -1,5 +1,5 @@
-import { CardType } from "@/app/wallet/Card"
-import { WalletType } from "@/pages/api/wallet"
+import type { CardType } from "@/app/wallet/Card"
+import type { WalletType } from "@/type"
 import { generatePassword } from "@/helpers"
 import HdKey from "hdkey"
 

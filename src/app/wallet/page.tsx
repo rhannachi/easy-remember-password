@@ -4,10 +4,11 @@ import dynamic from "next/dynamic"
 import type { CardType } from "./Card"
 import React from "react"
 import { generateHdKey, generatePassword, generatePath } from "@/helpers"
-import { ErrorApi, fetchApi } from "@/services/wallet.service"
+import { createApi, ErrorApi, fetchApi } from "./wallet.service"
 import { cardsTransformer } from "@/app/wallet/page.transformer"
 import HdKey from "hdkey"
 import Button from "@/components/Button"
+import type { WalletType } from "@/type"
 
 const Form = dynamic(() => import("./Form"), {
   loading: () => <p className="text-white">Loading...</p>,
@@ -39,7 +40,7 @@ export default function Page() {
     },
   })
 
-  const handleSubmit = async (passphrase: string, password: string) => {
+  const fetchWalletHandler = async (passphrase: string, password: string) => {
     try {
       setState({
         hdKey: undefined,
@@ -127,6 +128,12 @@ export default function Page() {
     })
   }
 
+  const addCardSubmitHandler = async (form: WalletType) => {
+    console.log("walletItem:", form)
+    const walletItem = await createApi(form)
+    console.log("walletItem:", walletItem)
+  }
+
   const isLoading = state && state?.fetch.isLoading
   const invalidCredential =
     !isLoading && state?.fetch.status === 403 ? state?.fetch.error : undefined
@@ -160,7 +167,7 @@ export default function Page() {
             <Form
               isLoading={isLoading}
               error={invalidCredential || unknownError}
-              handleSubmit={handleSubmit}
+              handleSubmit={fetchWalletHandler}
             />
           </article>
         </section>
@@ -192,7 +199,7 @@ export default function Page() {
         {state.cards && (
           <section className="justify-items-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
             {state.cards.map((card) => (
-              <Card key={card.uuid} {...card} className="m-1" />
+              <Card key={card.uuid} handleSubmit={addCardSubmitHandler} {...card} className="m-1" />
             ))}
           </section>
         )}

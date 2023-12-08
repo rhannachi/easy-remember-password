@@ -2,12 +2,9 @@
 
 import dynamic from "next/dynamic"
 import React from "react"
-import { generateHdKey, generatePassword, generatePath } from "@/helpers"
-import { addWalletItemApi, ErrorApi, fetchWalletApi } from "./wallet.service"
-import { cardsMapper } from "@/app/wallet/page.transformer"
+import { generatePassword, generatePath } from "@/helpers"
 import Button from "@/components/Button"
-import type { WalletType } from "@/type"
-import type { StateTypes } from "./type"
+import { addCardSubmitHandler, fetchWalletHandler, StateTypes } from "./page.state"
 
 const Form = dynamic(() => import("./Form"), {
   loading: () => <p className="text-white">Loading...</p>,
@@ -19,55 +16,7 @@ const Card = dynamic(() => import("./Card"), {
 })
 
 export default function Page() {
-  const [state, setState] = React.useState<StateTypes>()
-
-  const fetchWalletHandler = async (passphrase: string, password: string) => {
-    try {
-      setState((prevState) => ({
-        ...prevState,
-        hdKey: undefined,
-        cards: undefined,
-        fetchWalletApi: {
-          error: undefined,
-          status: undefined,
-          isLoading: true,
-        },
-      }))
-
-      const hdKey = await generateHdKey(passphrase, password)
-      if (!hdKey) return
-      const wallet = await fetchWalletApi(hdKey.publicExtendedKey)
-      const cards = cardsMapper(hdKey, wallet)
-
-      setState((prevState) => ({
-        ...prevState,
-        hdKey,
-        cards,
-        fetchWalletApi: {
-          error: undefined,
-          status: 200,
-          isLoading: false,
-        },
-      }))
-    } catch (e) {
-      let error = "Un problème est survenu"
-      let status = 500
-      if (e instanceof ErrorApi) {
-        status = e.status
-        error = e.error
-      }
-      setState((prevState) => ({
-        ...prevState,
-        hdKey: undefined,
-        cards: undefined,
-        fetchWalletApi: {
-          error,
-          status,
-          isLoading: false,
-        },
-      }))
-    }
-  }
+  const [state, setState] = React.useState<StateTypes>({})
 
   const addCard = () => {
     setState((prevState) => {
@@ -112,69 +61,6 @@ export default function Page() {
     })
   }
 
-  const addCardSubmitHandler = async (walletItem: WalletType) => {
-    try {
-      setState((prevState) => ({
-        ...prevState,
-        cards: prevState?.cards?.map((item) => {
-          if (item.uuid === walletItem.path) {
-            return {
-              ...item,
-              addWalletItemApi: {
-                error: undefined,
-                status: undefined,
-                isLoading: true,
-              },
-            }
-          }
-          return item
-        }),
-      }))
-
-      await addWalletItemApi(walletItem)
-
-      setState((prevState) => ({
-        ...prevState,
-        cards: prevState?.cards?.map((item) => {
-          if (item.uuid === walletItem.path) {
-            return {
-              ...item,
-              addWalletItemApi: {
-                error: undefined,
-                status: 200,
-                isLoading: false,
-              },
-            }
-          }
-          return item
-        }),
-      }))
-    } catch (e) {
-      let error = "Un problème est survenu"
-      let status = 500
-      if (e instanceof ErrorApi) {
-        status = e.status
-        error = e.error
-      }
-      setState((prevState) => ({
-        ...prevState,
-        cards: prevState?.cards?.map((item) => {
-          if (item.uuid === walletItem.path) {
-            return {
-              ...item,
-              addWalletItemApi: {
-                error,
-                status,
-                isLoading: false,
-              },
-            }
-          }
-          return item
-        }),
-      }))
-    }
-  }
-
   const isLoading = state && state?.fetchWalletApi?.isLoading
   const invalidCredential =
     !isLoading && state?.fetchWalletApi?.status === 403 ? state?.fetchWalletApi.error : undefined
@@ -208,7 +94,7 @@ export default function Page() {
             <Form
               isLoading={isLoading}
               error={invalidCredential || unknownError}
-              handleSubmit={fetchWalletHandler}
+              handleSubmit={fetchWalletHandler(setState)}
             />
           </article>
         </section>
@@ -240,7 +126,12 @@ export default function Page() {
         {state?.cards && (
           <section className="justify-items-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
             {state.cards.map((card) => (
-              <Card {...card} key={card.uuid} handleSubmit={addCardSubmitHandler} className="m-1" />
+              <Card
+                {...card}
+                key={card.uuid}
+                handleSubmit={addCardSubmitHandler(setState)}
+                className="m-1"
+              />
             ))}
           </section>
         )}

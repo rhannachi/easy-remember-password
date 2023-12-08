@@ -1,7 +1,7 @@
 import type { WalletType } from "@/type"
 import { generatePassword } from "@/helpers"
 import HdKey from "hdkey"
-import type { CardType } from "./type"
+import { CardType } from "./page.state"
 
 export const cardsMapper = (hdKey: HdKey, wallet: WalletType[]): CardType[] =>
   wallet.map(cardMapper(hdKey))

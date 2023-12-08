@@ -8,7 +8,7 @@ import Checkbox from "@/components/Checkbox"
 import Range from "@/components/Range"
 import Button from "@/components/Button"
 import Password from "@/components/Password"
-import type { CardType } from "./type"
+import { CardType } from "@/app/wallet/page.state"
 
 const getFormElement = (fieldName: string, e: React.FormEvent<HTMLFormElement>) =>
   e.currentTarget.elements.namedItem(fieldName) as HTMLInputElement

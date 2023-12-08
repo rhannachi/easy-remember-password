@@ -1,13 +1,14 @@
 import { CardType } from "@/app/wallet/Card"
-import { PasswordType } from "@/pages/api/wallet"
+import { WalletType } from "@/pages/api/wallet"
 import { generatePassword } from "@/helpers"
 import HdKey from "hdkey"
 
-export const cardListTransformer = (hdKey: HdKey, passwordList: PasswordType[]): CardType[] => {
-  return passwordList.map((password: PasswordType) => {
+export const cardsTransformer = (hdKey: HdKey, wallet: WalletType[]): CardType[] => {
+  return wallet.map((walletItem: WalletType) => {
     return {
-      ...password,
-      password: generatePassword(hdKey, password.uuid),
+      ...walletItem,
+      uuid: walletItem.path,
+      password: generatePassword(hdKey, walletItem.path),
     }
   })
 }

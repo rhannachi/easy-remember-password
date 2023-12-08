@@ -4,8 +4,8 @@ import dynamic from "next/dynamic"
 import type { CardType } from "./Card"
 import React from "react"
 import { generateHdKey, generatePassword, generatePath } from "@/helpers"
-import { ErrorApi, loginApi } from "@/services/wallet.service"
-import { cardListTransformer } from "@/app/wallet/page.transformer"
+import { ErrorApi, fetchApi } from "@/services/wallet.service"
+import { cardsTransformer } from "@/app/wallet/page.transformer"
 import HdKey from "hdkey"
 import Button from "@/components/Button"
 
@@ -20,8 +20,8 @@ const Card = dynamic(() => import("./Card"), {
 
 type StateTypes = {
   hdKey?: HdKey
-  cardList?: CardType[]
-  login: {
+  cards?: CardType[]
+  fetch: {
     status?: number
     isLoading?: boolean
     error?: string
@@ -31,10 +31,10 @@ type StateTypes = {
 export default function Page() {
   const [state, setState] = React.useState<StateTypes>({
     hdKey: undefined,
-    cardList: undefined,
-    login: {
-      error: undefined,
+    cards: undefined,
+    fetch: {
       status: undefined,
+      error: undefined,
       isLoading: false,
     },
   })
@@ -43,8 +43,8 @@ export default function Page() {
     try {
       setState({
         hdKey: undefined,
-        cardList: undefined,
-        login: {
+        cards: undefined,
+        fetch: {
           error: undefined,
           status: undefined,
           isLoading: true,
@@ -53,13 +53,13 @@ export default function Page() {
 
       const hdKey = await generateHdKey(passphrase, password)
       if (!hdKey) return
-      const passwordList = await loginApi(hdKey.publicExtendedKey)
-      const cardList = cardListTransformer(hdKey, passwordList)
+      const wallet = await fetchApi(hdKey.publicExtendedKey)
+      const cards = cardsTransformer(hdKey, wallet)
 
       setState({
         hdKey,
-        cardList,
-        login: {
+        cards,
+        fetch: {
           error: undefined,
           status: 200,
           isLoading: false,
@@ -74,8 +74,8 @@ export default function Page() {
       }
       setState({
         hdKey: undefined,
-        cardList: undefined,
-        login: {
+        cards: undefined,
+        fetch: {
           error,
           status,
           isLoading: false,
@@ -84,7 +84,7 @@ export default function Page() {
     }
   }
 
-  const addCardList = () => {
+  const addCard = () => {
     setState((prevState) => {
       if (!prevState.hdKey) return prevState
 
@@ -98,16 +98,15 @@ export default function Page() {
         hasSymbol: true,
       }
 
-      const uuid = generatePath()
+      const path = generatePath()
+      const password = generatePassword(prevState.hdKey, path)
 
-      const password = generatePassword(prevState.hdKey, uuid)
-
-      if (!prevState.cardList?.length) {
+      if (!prevState.cards?.length) {
         return {
           ...prevState,
-          cardList: [
+          cards: [
             {
-              uuid,
+              uuid: path,
               password,
               ...defaultObject,
             },
@@ -116,24 +115,24 @@ export default function Page() {
       }
       return {
         ...prevState,
-        cardList: [
+        cards: [
           {
-            uuid,
+            uuid: path,
             password,
             ...defaultObject,
           },
-          ...prevState.cardList,
+          ...prevState.cards,
         ],
       }
     })
   }
 
-  const isLoading = state && state?.login.isLoading
+  const isLoading = state && state?.fetch.isLoading
   const invalidCredential =
-    !isLoading && state?.login.status === 403 ? state?.login.error : undefined
+    !isLoading && state?.fetch.status === 403 ? state?.fetch.error : undefined
   const unknownError =
-    !isLoading && state?.login.status !== 200 && state?.login.status !== 403
-      ? state?.login.error
+    !isLoading && state?.fetch.status !== 200 && state?.fetch.status !== 403
+      ? state?.fetch.error
       : undefined
 
   return (
@@ -168,7 +167,7 @@ export default function Page() {
       )}
       <section className="flex h-10 mt-10 max-w-md">
         {state.hdKey && (
-          <Button onClick={addCardList} style="secondary" className="px-10 text-white border-white">
+          <Button onClick={addCard} style="secondary" className="px-10 text-white border-white">
             <div className="flex flex-row items-center justify-between">
               <div className="mr-2">Ajouter un password</div>
               <svg
@@ -190,9 +189,9 @@ export default function Page() {
       </section>
       {/** * Cards ****/}
       <div className="my-10 text-white">
-        {state.cardList && (
+        {state.cards && (
           <section className="justify-items-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
-            {state.cardList.map((card) => (
+            {state.cards.map((card) => (
               <Card key={card.uuid} {...card} className="m-1" />
             ))}
           </section>

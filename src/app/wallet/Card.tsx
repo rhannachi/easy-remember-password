@@ -1,6 +1,6 @@
 "use client"
 
-import { PasswordType } from "@/pages/api/wallet"
+import { WalletType } from "@/pages/api/wallet"
 import InputCustom from "@/components/InputCustom"
 import Checkbox from "@/components/Checkbox"
 import Range from "@/components/Range"
@@ -20,7 +20,8 @@ const INPUTS_NAME = [
 ] as const
 type InputNameType = (typeof INPUTS_NAME)[number]
 
-export type CardType = PasswordType & {
+export type CardType = Omit<WalletType, "path"> & {
+  uuid: string
   password: string
 }
 

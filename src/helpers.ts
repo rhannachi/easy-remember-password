@@ -87,8 +87,8 @@ export const hashTransform = ({
 import * as bip39 from "bip39"
 import HdKey from "hdkey"
 
-export const generatePassword = (hdKey: HdKey, uuid: string): string => {
-  return hdKey.derive(uuid).publicExtendedKey.split("").reverse().join("")
+export const generatePassword = (hdKey: HdKey, path: string): string => {
+  return hdKey.derive(path).publicExtendedKey.split("").reverse().join("")
 }
 
 export const generatePath = () => {

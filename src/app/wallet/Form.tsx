@@ -30,7 +30,7 @@ export default function Form({ isLoading, error, handleSubmit }: FormProps) {
         ...prevState,
         passphrase: value.trim(),
       }))
-    }, 500),
+    }, 300),
   ).current
 
   const debouncedPassword = React.useRef(
@@ -39,7 +39,7 @@ export default function Form({ isLoading, error, handleSubmit }: FormProps) {
         ...prevState,
         password: value.trim(),
       }))
-    }, 500),
+    }, 300),
   ).current
 
   const isFormValidMemo = React.useMemo(() => isFormValid(state), [state])

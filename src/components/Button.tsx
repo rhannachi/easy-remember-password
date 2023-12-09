@@ -13,9 +13,10 @@ export default function Button({
     style?: "primary" | "secondary" | "warning"
   }
 >) {
-  const primaryClassName = "text-white border-2 border-[#2872EC] bg-[#2872EC]" //  bg-blue-600
-  const secondaryClassName = "border-2 border-blue-600 text-blue-600"
-  const warningClassName = "border-2 border-red-600 text-red-600"
+  const primaryClassName = "text-white border-[#2872EC] bg-[#2872EC]" //  bg-blue-600
+  const secondaryClassName = "border-blue-600 text-blue-600"
+  const warningClassName = "border-red-600 text-red-600"
+  const disabledClassName = "border-gray-400 text-white bg-gray-400"
 
   return (
     <button
@@ -25,13 +26,11 @@ export default function Button({
       role="button"
       className={clsx(
         className,
-        "rounded py-1 text-md",
-        props.disabled && "bg-gray-400",
-        style === "secondary"
-          ? secondaryClassName
-          : style === "warning"
-            ? warningClassName
-            : primaryClassName,
+        "rounded border-2 py-1 text-md",
+        !props.disabled && style === "primary" && primaryClassName,
+        !props.disabled && style === "secondary" && secondaryClassName,
+        !props.disabled && style === "warning" && warningClassName,
+        props.disabled && disabledClassName,
       )}
     >
       {isLoading ? (

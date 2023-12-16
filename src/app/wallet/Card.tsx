@@ -90,10 +90,10 @@ export default function Card({
       >
         <div>
           <svg
-              className="h-6 w-6 fill-white"
-              fill="none"
-              viewBox="0 0 25 24"
-              xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6 fill-white"
+            fill="none"
+            viewBox="0 0 25 24"
+            xmlns="http://www.w3.org/2000/svg"
           >
             <g>
               <path d="m8.25864 21.2453c.64697-.647 1.01864-1.4729 1.115-2.3264.13077-1.1356-.24778-2.3126-1.115-3.1798-.5162-.5162-1.14941-.8603-1.81703-1.0186-1.2733-.3235-2.68425.0137-3.68913 1.0186-.69515.6952-1.0737 1.583-1.12188 2.4984-.03441.3923 0 .7984.10325 1.1907.1583.6677.50243 1.3009 1.01863 1.8171 1.52108 1.521 3.98508 1.521 5.50616 0zm-1.29395-3.4689c.3992 0 .72957.3304.72957.7296-.00688.406-.33037.7295-.73645.7364l-.72268-.0069.00688.6952c-.00688.4061-.33037.7295-.73645.7364-.40608-.0069-.72956-.3304-.73645-.7364l.00689-.6952-.72269.0069c-.40608-.0069-.72956-.3304-.73645-.7364.00689-.1996.08948-.3786.22025-.5094.13077-.1307.30972-.2133.50932-.2202h.72957v-.7571c0-.2065.08259-.3854.21336-.5162s.30972-.2134.5162-.2134c.3992 0 .72957.3304.72957.7296v.7571z" />
@@ -103,7 +103,9 @@ export default function Card({
             </g>
           </svg>
         </div>
-        <div className="px-1 basis-1/2 text-ellipsis overflow-hidden">{getSiteName(state.link)}</div>
+        <div className="px-1 basis-1/2 text-ellipsis overflow-hidden">
+          {getSiteName(state.link)}
+        </div>
         <div className="basis-1/2 text-ellipsis overflow-hidden">{state.username}</div>
       </header>
       {/** * FORM ****/}
@@ -114,10 +116,10 @@ export default function Card({
           name={`site-url-${uuid}`}
           className=" my-0.5"
           onChange={(e) =>
-              setState((prevState) => ({
-                ...prevState,
-                link: e.target.value.trim(),
-              }))
+            setState((prevState) => ({
+              ...prevState,
+              link: e.target.value.trim(),
+            }))
           }
         />
         <InputCustom

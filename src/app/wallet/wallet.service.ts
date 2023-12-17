@@ -32,16 +32,21 @@ export const fetchWalletApi = async (publicExtendedKey: string): Promise<IWallet
   }
 }
 
-export const addWalletItemApi = async (walletItem: IWallet): Promise<IWallet> => {
+export const addWalletItemApi = async (
+  publicExtendedKey: string,
+  walletItem: IWallet,
+): Promise<IWallet> => {
   try {
+    const walletItemCreate: IWallet & { publicExtendedKey: string } = {
+      publicExtendedKey,
+      ...walletItem,
+    }
     const response = await fetch("/api/wallet/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        ...walletItem,
-      }),
+      body: JSON.stringify(walletItemCreate),
     })
     if (response.ok) {
       return (await response.json()).walletItem as IWallet

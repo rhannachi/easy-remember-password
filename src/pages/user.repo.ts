@@ -6,3 +6,5 @@ export const findUser = async (publicExtendedKey: string): Promise<IUser | null>
     publicExtendedKey,
   })
 }
+
+// export const createUser = async (): Promise

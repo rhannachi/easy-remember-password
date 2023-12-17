@@ -68,7 +68,7 @@ export default function Card({
       return
     }
 
-    handleSubmit({
+    const walletItem = {
       path: uuid,
       username: username,
       link: link,
@@ -77,7 +77,9 @@ export default function Card({
       hasUppercase: hasUppercase,
       hasSymbol: hasSymbol,
       length: length,
-    })
+    }
+
+    handleSubmit(walletItem)
   }
 
   const isFormValidMemo = React.useMemo(() => isFormValid(state), [state])

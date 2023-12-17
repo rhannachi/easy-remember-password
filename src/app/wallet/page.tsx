@@ -123,13 +123,16 @@ export default function Page() {
       </section>
       {/** * Cards ****/}
       <div className="my-10 text-white">
-        {state?.cards && (
+        {state?.cards && state.hdKey?.publicExtendedKey && (
           <section className="justify-items-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
             {state.cards.map((card) => (
               <Card
                 {...card}
                 key={card.uuid}
-                handleSubmit={addCardSubmitHandler(setState)}
+                handleSubmit={addCardSubmitHandler(
+                  state.hdKey?.publicExtendedKey as string,
+                  setState,
+                )}
                 className="m-1"
               />
             ))}

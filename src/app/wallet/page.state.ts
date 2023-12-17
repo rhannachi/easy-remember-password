@@ -74,7 +74,8 @@ export const fetchWalletHandler =
   }
 
 export const addCardSubmitHandler =
-  (setState: Dispatch<SetStateAction<StateTypes>>) => async (walletItem: IWallet) => {
+  (publicExtendedKey: string, setState: Dispatch<SetStateAction<StateTypes>>) =>
+  async (walletItem: IWallet) => {
     try {
       setState((prevState) => ({
         ...prevState,
@@ -93,12 +94,12 @@ export const addCardSubmitHandler =
         }),
       }))
 
-      await addWalletItemApi(walletItem)
+      const newWalletItem = await addWalletItemApi(publicExtendedKey, walletItem)
 
       setState((prevState) => ({
         ...prevState,
         cards: prevState?.cards?.map((item) => {
-          if (item.uuid === walletItem.path) {
+          if (item.uuid === newWalletItem.path) {
             return {
               ...item,
               addWalletItemApi: {

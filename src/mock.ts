@@ -1,9 +1,11 @@
-import type { UserType } from "@/type"
+import type { IUser } from "@/types"
+import { Types } from "mongoose"
 
-export const users: UserType[] = [
+export const users: IUser[] = [
   {
     // password: ramzi
     // pasphrase: ramzi
+    _id: new Types.ObjectId(),
     publicExtendedKey:
       "xpub661MyMwAqRbcG43HkAorZ21tGpUfsrchZhMMCXmiZ3hj9sdPhdPsoAwvJwo7XqZK8YynXnShmNbpCCaXPRFrndMZgXSLfHzmw24GN6eFdkV",
     wallet: [

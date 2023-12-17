@@ -1,4 +1,4 @@
-import type { WalletType } from "@/type"
+import type { IWallet } from "@/types"
 
 export class ErrorApi extends Error {
   status: number
@@ -10,7 +10,7 @@ export class ErrorApi extends Error {
   }
 }
 
-export const fetchWalletApi = async (publicExtendedKey: string): Promise<WalletType[]> => {
+export const fetchWalletApi = async (publicExtendedKey: string): Promise<IWallet[]> => {
   try {
     const response = await fetch("/api/wallet", {
       method: "POST",
@@ -20,7 +20,7 @@ export const fetchWalletApi = async (publicExtendedKey: string): Promise<WalletT
       body: JSON.stringify({ publicExtendedKey }),
     })
     if (response.ok) {
-      return (await response.json()).wallet as WalletType[]
+      return (await response.json()).wallet as IWallet[]
     }
 
     throw new ErrorApi((await response.json()).error, response.status)
@@ -32,7 +32,7 @@ export const fetchWalletApi = async (publicExtendedKey: string): Promise<WalletT
   }
 }
 
-export const addWalletItemApi = async (walletItem: WalletType): Promise<WalletType> => {
+export const addWalletItemApi = async (walletItem: IWallet): Promise<IWallet> => {
   try {
     const response = await fetch("/api/wallet/create", {
       method: "POST",
@@ -44,7 +44,7 @@ export const addWalletItemApi = async (walletItem: WalletType): Promise<WalletTy
       }),
     })
     if (response.ok) {
-      return (await response.json()).walletItem as WalletType
+      return (await response.json()).walletItem as IWallet
     }
 
     throw new ErrorApi((await response.json()).error, response.status)

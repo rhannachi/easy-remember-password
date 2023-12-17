@@ -2,7 +2,7 @@ import { generateHdKey } from "@/helpers"
 import { addWalletItemApi, ErrorApi, fetchWalletApi } from "@/app/wallet/wallet.service"
 import { cardsMapper } from "@/app/wallet/page.mapper"
 import { Dispatch, SetStateAction } from "react"
-import { WalletType } from "@/type"
+import { IWallet } from "@/types"
 import HdKey from "hdkey"
 
 export type ResponseApiType = {
@@ -11,7 +11,7 @@ export type ResponseApiType = {
   error?: string
 }
 
-export type CardType = Omit<WalletType, "path"> & {
+export type CardType = Omit<IWallet, "path"> & {
   uuid: string
   password: string
   addWalletItemApi?: ResponseApiType
@@ -74,7 +74,7 @@ export const fetchWalletHandler =
   }
 
 export const addCardSubmitHandler =
-  (setState: Dispatch<SetStateAction<StateTypes>>) => async (walletItem: WalletType) => {
+  (setState: Dispatch<SetStateAction<StateTypes>>) => async (walletItem: IWallet) => {
     try {
       setState((prevState) => ({
         ...prevState,

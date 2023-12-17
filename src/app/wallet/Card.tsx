@@ -2,7 +2,7 @@
 
 import clsx from "clsx"
 import React from "react"
-import type { WalletType } from "@/type"
+import type { IWallet } from "@/types"
 import InputCustom from "@/components/InputCustom"
 import Checkbox from "@/components/Checkbox"
 import Range from "@/components/Range"
@@ -44,7 +44,7 @@ export default function Card({
   addWalletItemApi,
   className,
 }: CardType & {
-  handleSubmit: (walletItem: WalletType) => void
+  handleSubmit: (walletItem: IWallet) => void
   className?: string
 }) {
   const [state, setState] = React.useState<StateType>({

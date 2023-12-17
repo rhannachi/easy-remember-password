@@ -1,22 +1,10 @@
-import { Document, model, models, Schema } from "mongoose"
+import { Model, model, models, Schema } from "mongoose"
+import { IUser } from "@/types"
 
-type WalletType = {
-  path: string
-  link: string
-  username: string
-  hasNumeric: boolean
-  hasLowercase: boolean
-  hasUppercase: boolean
-  hasSymbol: boolean
-  length: number
-}
+const USER_NAME = "User" as const
+const USER_COLLECTION = "users" as const
 
-export interface IUser extends Document {
-  publicExtendedKey: string
-  wallet: WalletType[]
-}
-
-const userSchema = new Schema<IUser>(
+const userSchema: Schema<IUser> = new Schema<IUser>(
   {
     publicExtendedKey: {
       type: String,
@@ -62,4 +50,5 @@ const userSchema = new Schema<IUser>(
   { timestamps: true },
 )
 
-export default models.User || model("User", userSchema)
+export const UserModel: Model<IUser> =
+  models[USER_NAME] || model(USER_NAME, userSchema, USER_COLLECTION)

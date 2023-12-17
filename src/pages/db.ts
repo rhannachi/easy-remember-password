@@ -17,6 +17,7 @@ async function dbConnect() {
     cached.promise = mongoose.connect(`${MONGODB_URI}/${MONGODB_DB}?retryWrites=true&w=majority`)
   }
   cached.conn = await cached.promise
+  console.info("Successfully connected to database")
 
   return cached.conn
 }

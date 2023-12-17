@@ -1,4 +1,5 @@
 import type { IWallet } from "@/types"
+import { IWalletCreatePayload } from "@/pages/api/wallet/create"
 
 export class ErrorApi extends Error {
   status: number
@@ -37,7 +38,7 @@ export const addWalletItemApi = async (
   walletItem: IWallet,
 ): Promise<IWallet> => {
   try {
-    const walletItemCreate: IWallet & { publicExtendedKey: string } = {
+    const walletItemCreate: IWalletCreatePayload = {
       publicExtendedKey,
       ...walletItem,
     }

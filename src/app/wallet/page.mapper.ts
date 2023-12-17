@@ -6,7 +6,7 @@ import { CardType } from "./page.state"
 export const cardsMapper = (hdKey: HdKey, wallet: IWallet[]): CardType[] =>
   wallet.map(cardMapper(hdKey))
 
-const cardMapper =
+export const cardMapper =
   (hdKey: HdKey) =>
   ({
     link,

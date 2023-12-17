@@ -2,10 +2,15 @@ import { NextApiRequest, NextApiResponse } from "next"
 import connectDB from "@/pages/db"
 import { findUser } from "@/pages/user.repo"
 import { UserModel } from "@/pages/user.model"
+import { IWallet } from "@/types"
+
+export interface IWalletCreatePayload extends IWallet {
+  publicExtendedKey: string
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { publicExtendedKey, ...walletItem } = req.body
+    const { publicExtendedKey, ...walletItem } = req.body as IWalletCreatePayload
 
     // TODO move ?
     await connectDB()
@@ -24,10 +29,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       })
     }
 
-    const newWallet = [walletItem, ...user.wallet]
+    const exist = user.wallet.findIndex((item) => item.path === walletItem.path) >= 0
+
+    let newWallet = [walletItem, ...user.wallet]
+
+    if (exist) {
+      newWallet = user.wallet.map((item) => {
+        if (item.path === walletItem.path) {
+          return walletItem
+        }
+        return item
+      })
+    }
 
     await UserModel.updateOne(
-      { _id: user._id },
+      { publicExtendedKey: user.publicExtendedKey },
       {
         $set: {
           wallet: newWallet,
@@ -38,7 +54,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       .lean()
       .exec()
 
-    // TODO ....
     res.status(200).json({
       publicExtendedKey,
       walletItem,

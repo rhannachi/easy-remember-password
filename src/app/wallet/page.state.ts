@@ -1,6 +1,6 @@
 import { generateHdKey } from "@/helpers"
 import { addWalletItemApi, ErrorApi, fetchWalletApi } from "@/app/wallet/wallet.service"
-import { cardsMapper } from "@/app/wallet/page.mapper"
+import { cardMapper, cardsMapper } from "@/app/wallet/page.mapper"
 import { Dispatch, SetStateAction } from "react"
 import { IWallet } from "@/types"
 import HdKey from "hdkey"
@@ -74,8 +74,7 @@ export const fetchWalletHandler =
   }
 
 export const addCardSubmitHandler =
-  (publicExtendedKey: string, setState: Dispatch<SetStateAction<StateTypes>>) =>
-  async (walletItem: IWallet) => {
+  (hdKey: HdKey, setState: Dispatch<SetStateAction<StateTypes>>) => async (walletItem: IWallet) => {
     try {
       setState((prevState) => ({
         ...prevState,
@@ -94,14 +93,14 @@ export const addCardSubmitHandler =
         }),
       }))
 
-      const newWalletItem = await addWalletItemApi(publicExtendedKey, walletItem)
+      const newWalletItem = await addWalletItemApi(hdKey.publicExtendedKey, walletItem)
 
       setState((prevState) => ({
         ...prevState,
         cards: prevState?.cards?.map((item) => {
           if (item.uuid === newWalletItem.path) {
             return {
-              ...item,
+              ...cardMapper(hdKey)(walletItem),
               addWalletItemApi: {
                 error: undefined,
                 status: 200,

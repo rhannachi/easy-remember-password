@@ -5,6 +5,7 @@ import React from "react"
 import { generatePassword, generatePath } from "@/helpers"
 import Button from "@/components/Button"
 import { addCardSubmitHandler, fetchWalletHandler, StateTypes } from "./page.state"
+import HdKey from "hdkey"
 
 const Form = dynamic(() => import("./Form"), {
   loading: () => <p className="text-white">Loading...</p>,
@@ -123,16 +124,13 @@ export default function Page() {
       </section>
       {/** * Cards ****/}
       <div className="my-10 text-white">
-        {state?.cards && state.hdKey?.publicExtendedKey && (
+        {state?.cards && state.hdKey && (
           <section className="justify-items-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
             {state.cards.map((card) => (
               <Card
                 {...card}
                 key={card.uuid}
-                handleSubmit={addCardSubmitHandler(
-                  state.hdKey?.publicExtendedKey as string,
-                  setState,
-                )}
+                handleSubmit={addCardSubmitHandler(state.hdKey as HdKey, setState)}
                 className="m-1"
               />
             ))}

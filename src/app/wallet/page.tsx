@@ -4,7 +4,12 @@ import dynamic from "next/dynamic"
 import React from "react"
 import { generatePassword, generatePath } from "@/helpers"
 import Button from "@/components/Button"
-import { addCardSubmitHandler, fetchWalletHandler, StateTypes } from "./page.state"
+import {
+  addCardSubmitHandler,
+  deleteCardHandler,
+  fetchWalletHandler,
+  StateTypes,
+} from "./page.state"
 import HdKey from "hdkey"
 
 const Form = dynamic(() => import("./Form"), {
@@ -131,6 +136,7 @@ export default function Page() {
                 {...card}
                 key={card.uuid}
                 handleSubmit={addCardSubmitHandler(state.hdKey as HdKey, setState)}
+                handleDelete={deleteCardHandler(state.hdKey as HdKey, setState)}
                 className="m-1"
               />
             ))}

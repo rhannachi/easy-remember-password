@@ -1,5 +1,10 @@
 import { generateHdKey } from "@/helpers"
-import { addWalletItemApi, ErrorApi, fetchWalletApi } from "@/app/wallet/wallet.service"
+import {
+  addWalletItemApi,
+  deleteWalletItemApi,
+  ErrorApi,
+  fetchWalletApi,
+} from "@/app/wallet/wallet.service"
 import { cardMapper, cardsMapper } from "@/app/wallet/page.mapper"
 import { Dispatch, SetStateAction } from "react"
 import { IWallet } from "@/types"
@@ -15,6 +20,7 @@ export type CardType = Omit<IWallet, "path"> & {
   uuid: string
   password: string
   addWalletItemApi?: ResponseApiType
+  deleteWalletItemApi?: ResponseApiType
 }
 
 export type StateTypes = {
@@ -125,6 +131,58 @@ export const addCardSubmitHandler =
             return {
               ...item,
               addWalletItemApi: {
+                error,
+                status,
+                isLoading: false,
+              },
+            }
+          }
+          return item
+        }),
+      }))
+    }
+  }
+
+export const deleteCardHandler =
+  (hdKey: HdKey, setState: Dispatch<SetStateAction<StateTypes>>) => async (path: string) => {
+    try {
+      setState((prevState) => ({
+        ...prevState,
+        cards: prevState?.cards?.map((item) => {
+          if (item.uuid === path) {
+            return {
+              ...item,
+              deleteWalletItemApi: {
+                error: undefined,
+                status: undefined,
+                isLoading: true,
+              },
+            }
+          }
+          return item
+        }),
+      }))
+
+      const pathDeleted = await deleteWalletItemApi(hdKey.publicExtendedKey, path)
+
+      setState((prevState) => ({
+        ...prevState,
+        cards: prevState?.cards?.filter((item) => item.uuid !== pathDeleted),
+      }))
+    } catch (e) {
+      let error = "Un problème est survenu"
+      let status = 500
+      if (e instanceof ErrorApi) {
+        status = e.status
+        error = e.error
+      }
+      setState((prevState) => ({
+        ...prevState,
+        cards: prevState?.cards?.map((item) => {
+          if (item.uuid === path) {
+            return {
+              ...item,
+              deleteWalletItemApi: {
                 error,
                 status,
                 isLoading: false,

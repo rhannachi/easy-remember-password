@@ -40,11 +40,14 @@ export default function Card({
   link,
   length,
   password,
-  handleSubmit,
   addWalletItemApi,
+  deleteWalletItemApi,
   className,
+  handleSubmit,
+  handleDelete,
 }: CardType & {
   handleSubmit: (walletItem: IWallet) => void
+  handleDelete: (uuid: string) => void
   className?: string
 }) {
   const [state, setState] = React.useState<StateType>({
@@ -187,10 +190,12 @@ export default function Card({
         />
         <div className="flex flex-row justify-end mt-5 items-center">
           <Button
+            isLoading={deleteWalletItemApi?.isLoading}
             disabled={!isFormValidMemo}
             style="warning"
             name="remove-form-button"
             type="button"
+            onClick={() => handleDelete(uuid)}
             className="w-full mr-1"
           >
             Supprimer

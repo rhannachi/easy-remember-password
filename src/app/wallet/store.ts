@@ -11,6 +11,10 @@ import {
 } from "@/app/wallet/wallet.service"
 import { cardMapper, cardsMapper } from "@/app/wallet/page.mapper"
 
+const LOADING_STATUS = "loading" as const
+const SUCCEEDED_STATUS = "succeeded" as const
+const FAILED_STATUS = "failed" as const
+
 export type ResponseApiType = {
   status?: number
   isLoading: boolean
@@ -72,32 +76,38 @@ export const useStore = create<StoreType>()(
     // Fetch wallet
     fetchWallet: () => async (passphrase, password) => {
       try {
-        set((state) => ({
-          ...state,
-          hdKey: undefined,
-          cards: undefined,
-          fetchWalletApi: {
-            error: undefined,
-            status: undefined,
-            isLoading: true,
-          },
-        }))
+        set(
+          (state) => ({
+            ...state,
+            fetchWalletApi: {
+              error: undefined,
+              status: undefined,
+              isLoading: true,
+            },
+          }),
+          false,
+          `fetchWallet/${LOADING_STATUS}`,
+        )
 
         const hdKey = await generateHdKey(passphrase, password)
         if (!hdKey) return
         const wallet = await fetchWalletApi(hdKey.publicExtendedKey)
         const cards = cardsMapper(hdKey, wallet)
 
-        set((state) => ({
-          ...state,
-          hdKey,
-          cards,
-          fetchWalletApi: {
-            error: undefined,
-            status: 200,
-            isLoading: false,
-          },
-        }))
+        set(
+          (state) => ({
+            ...state,
+            hdKey,
+            cards,
+            fetchWalletApi: {
+              error: undefined,
+              status: 200,
+              isLoading: false,
+            },
+          }),
+          false,
+          `fetchWallet/${SUCCEEDED_STATUS}`,
+        )
       } catch (e) {
         let error = "Un problème est survenu"
         let status = 500
@@ -105,16 +115,20 @@ export const useStore = create<StoreType>()(
           status = e.status
           error = e.error
         }
-        set((state) => ({
-          ...state,
-          hdKey: undefined,
-          cards: undefined,
-          fetchWalletApi: {
-            error,
-            status,
-            isLoading: false,
-          },
-        }))
+        set(
+          (state) => ({
+            ...state,
+            hdKey: undefined,
+            cards: undefined,
+            fetchWalletApi: {
+              error,
+              status,
+              isLoading: false,
+            },
+          }),
+          false,
+          `fetchWallet/${FAILED_STATUS}`,
+        )
       }
     },
     // Add or Update wallet item
@@ -123,41 +137,49 @@ export const useStore = create<StoreType>()(
         const hdKey = get().hdKey
         if (!hdKey) return
 
-        set((state) => ({
-          ...state,
-          cards: state.cards.map((item) => {
-            if (item.path === walletItem.path) {
-              return {
-                ...item,
-                addWalletItemApi: {
-                  error: undefined,
-                  status: undefined,
-                  isLoading: true,
-                },
+        set(
+          (state) => ({
+            ...state,
+            cards: state.cards.map((item) => {
+              if (item.path === walletItem.path) {
+                return {
+                  ...item,
+                  addWalletItemApi: {
+                    error: undefined,
+                    status: undefined,
+                    isLoading: true,
+                  },
+                }
               }
-            }
-            return item
+              return item
+            }),
           }),
-        }))
+          false,
+          `addWalletItem/${LOADING_STATUS}`,
+        )
 
         const newWalletItem = await addWalletItemApi(hdKey.publicExtendedKey, walletItem)
 
-        set((state) => ({
-          ...state,
-          cards: state.cards.map((item) => {
-            if (item.path === newWalletItem.path) {
-              return {
-                ...cardMapper(hdKey)(walletItem),
-                addWalletItemApi: {
-                  error: undefined,
-                  status: 200,
-                  isLoading: false,
-                },
+        set(
+          (state) => ({
+            ...state,
+            cards: state.cards.map((item) => {
+              if (item.path === newWalletItem.path) {
+                return {
+                  ...cardMapper(hdKey)(walletItem),
+                  addWalletItemApi: {
+                    error: undefined,
+                    status: 200,
+                    isLoading: false,
+                  },
+                }
               }
-            }
-            return item
+              return item
+            }),
           }),
-        }))
+          false,
+          `addWalletItem/${SUCCEEDED_STATUS}`,
+        )
       } catch (e) {
         let error = "Un problème est survenu"
         let status = 500
@@ -165,22 +187,26 @@ export const useStore = create<StoreType>()(
           status = e.status
           error = e.error
         }
-        set((state) => ({
-          ...state,
-          cards: state.cards.map((item) => {
-            if (item.path === walletItem.path) {
-              return {
-                ...item,
-                addWalletItemApi: {
-                  error,
-                  status,
-                  isLoading: false,
-                },
+        set(
+          (state) => ({
+            ...state,
+            cards: state.cards.map((item) => {
+              if (item.path === walletItem.path) {
+                return {
+                  ...item,
+                  addWalletItemApi: {
+                    error,
+                    status,
+                    isLoading: false,
+                  },
+                }
               }
-            }
-            return item
+              return item
+            }),
           }),
-        }))
+          false,
+          `addWalletItem/${FAILED_STATUS}`,
+        )
       }
     },
     // Delete wallet item
@@ -189,29 +215,37 @@ export const useStore = create<StoreType>()(
         const hdKey = get().hdKey
         if (!hdKey) return
 
-        set((state) => ({
-          ...state,
-          cards: state.cards.map((item) => {
-            if (item.path === path) {
-              return {
-                ...item,
-                deleteWalletItemApi: {
-                  error: undefined,
-                  status: undefined,
-                  isLoading: true,
-                },
+        set(
+          (state) => ({
+            ...state,
+            cards: state.cards.map((item) => {
+              if (item.path === path) {
+                return {
+                  ...item,
+                  deleteWalletItemApi: {
+                    error: undefined,
+                    status: undefined,
+                    isLoading: true,
+                  },
+                }
               }
-            }
-            return item
+              return item
+            }),
           }),
-        }))
+          false,
+          `deleteWalletItem/${LOADING_STATUS}`,
+        )
 
         const pathDeleted = await deleteWalletItemApi(hdKey.publicExtendedKey, path)
 
-        set((state) => ({
-          ...state,
-          cards: state.cards.filter((item) => item.path !== pathDeleted),
-        }))
+        set(
+          (state) => ({
+            ...state,
+            cards: state.cards.filter((item) => item.path !== pathDeleted),
+          }),
+          false,
+          `deleteWalletItem/${SUCCEEDED_STATUS}`,
+        )
       } catch (e) {
         let error = "Un problème est survenu"
         let status = 500
@@ -219,22 +253,26 @@ export const useStore = create<StoreType>()(
           status = e.status
           error = e.error
         }
-        set((state) => ({
-          ...state,
-          cards: state.cards.map((item) => {
-            if (item.path === path) {
-              return {
-                ...item,
-                deleteWalletItemApi: {
-                  error,
-                  status,
-                  isLoading: false,
-                },
+        set(
+          (state) => ({
+            ...state,
+            cards: state.cards.map((item) => {
+              if (item.path === path) {
+                return {
+                  ...item,
+                  deleteWalletItemApi: {
+                    error,
+                    status,
+                    isLoading: false,
+                  },
+                }
               }
-            }
-            return item
+              return item
+            }),
           }),
-        }))
+          false,
+          `deleteWalletItem/${FAILED_STATUS}`,
+        )
       }
     },
   })),

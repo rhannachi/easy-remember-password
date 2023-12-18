@@ -31,7 +31,7 @@ const getSiteName = (link: string) => {
 type StateType = Pick<CardType, "length" | "link" | "username">
 
 export default function Card({
-  uuid,
+  path,
   username,
   hasNumeric,
   hasLowercase,
@@ -47,7 +47,7 @@ export default function Card({
   handleDelete,
 }: CardType & {
   handleSubmit: (walletItem: WalletType) => void
-  handleDelete: (uuid: string) => void
+  handleDelete: (path: string) => void
   className?: string
 }) {
   const [state, setState] = React.useState<StateType>({
@@ -59,20 +59,20 @@ export default function Card({
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const link = getFormElement(`site-url-${uuid}`, e).value
-    const username = getFormElement(`username-${uuid}`, e).value
-    const hasLowercase = getFormElement(`has-lowercase-${uuid}`, e).checked
-    const hasNumeric = getFormElement(`has-numeric-${uuid}`, e).checked
-    const hasUppercase = getFormElement(`has-uppercase-${uuid}`, e).checked
-    const hasSymbol = getFormElement(`has-symbol-${uuid}`, e).checked
-    const length = Number(getFormElement(`length-${uuid}`, e).value)
+    const link = getFormElement(`site-url-${path}`, e).value
+    const username = getFormElement(`username-${path}`, e).value
+    const hasLowercase = getFormElement(`has-lowercase-${path}`, e).checked
+    const hasNumeric = getFormElement(`has-numeric-${path}`, e).checked
+    const hasUppercase = getFormElement(`has-uppercase-${path}`, e).checked
+    const hasSymbol = getFormElement(`has-symbol-${path}`, e).checked
+    const length = Number(getFormElement(`length-${path}`, e).value)
 
     if (!isFormValid(state)) {
       return
     }
 
     const walletItem = {
-      path: uuid,
+      path,
       username: username,
       link: link,
       hasLowercase: hasLowercase,
@@ -118,7 +118,7 @@ export default function Card({
         <InputCustom
           value={state.link}
           placeholder="🔗 url"
-          name={`site-url-${uuid}`}
+          name={`site-url-${path}`}
           className=" my-0.5"
           onChange={(e) =>
             setState((prevState) => ({
@@ -131,7 +131,7 @@ export default function Card({
           value={state.username}
           suffixIcon="copy"
           placeholder="📧 username"
-          name={`username-${uuid}`}
+          name={`username-${path}`}
           className=" my-0.5"
           onChange={(e) =>
             setState((prevState) => ({
@@ -145,27 +145,27 @@ export default function Card({
         {/** * CHECKBOX ****/}
         <div className="flex flex-row h-10 mt-1 mr-2">
           <Checkbox
-            name={`has-lowercase-${uuid}`}
+            name={`has-lowercase-${path}`}
             className="basis-1/4"
             defaultChecked={hasLowercase}
             label="abc"
             disabled
           />
           <Checkbox
-            name={`has-numeric-${uuid}`}
+            name={`has-numeric-${path}`}
             className="basis-1/4 justify-center"
             defaultChecked={hasNumeric}
             label="123"
             disabled
           />
           <Checkbox
-            name={`has-uppercase-${uuid}`}
+            name={`has-uppercase-${path}`}
             className="basis-1/4 justify-center"
             defaultChecked={hasUppercase}
             label="ABC"
           />
           <Checkbox
-            name={`has-symbol-${uuid}`}
+            name={`has-symbol-${path}`}
             className="basis-1/4 justify-end"
             defaultChecked={hasSymbol}
             label="#$&"
@@ -174,7 +174,7 @@ export default function Card({
         {/** * RANGE ****/}
         <Range
           className="h-10 px-1"
-          name={`length-${uuid}`}
+          name={`length-${path}`}
           value={state.length}
           label={
             <div className="w-24">
@@ -195,7 +195,7 @@ export default function Card({
             style="warning"
             name="remove-form-button"
             type="button"
-            onClick={() => handleDelete(uuid)}
+            onClick={() => handleDelete(path)}
             className="w-full mr-1"
           >
             Supprimer

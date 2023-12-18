@@ -46,7 +46,7 @@ export default function Page() {
           ...prevState,
           cards: [
             {
-              uuid: path,
+              path: path,
               password,
               ...defaultObject,
             },
@@ -57,7 +57,7 @@ export default function Page() {
         ...prevState,
         cards: [
           {
-            uuid: path,
+            path: path,
             password,
             ...defaultObject,
           },
@@ -134,7 +134,7 @@ export default function Page() {
             {state.cards.map((card) => (
               <Card
                 {...card}
-                key={card.uuid}
+                key={card.path}
                 handleSubmit={addCardSubmitHandler(state.hdKey as HdKey, setState)}
                 handleDelete={deleteCardHandler(state.hdKey as HdKey, setState)}
                 className="m-1"

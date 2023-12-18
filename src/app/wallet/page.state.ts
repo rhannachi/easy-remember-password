@@ -16,8 +16,7 @@ export type ResponseApiType = {
   error?: string
 }
 
-export type CardType = Omit<WalletType, "path"> & {
-  uuid: string
+export type CardType = WalletType & {
   password: string
   addWalletItemApi?: ResponseApiType
   deleteWalletItemApi?: ResponseApiType
@@ -86,7 +85,7 @@ export const addCardSubmitHandler =
       setState((prevState) => ({
         ...prevState,
         cards: prevState?.cards?.map((item) => {
-          if (item.uuid === walletItem.path) {
+          if (item.path === walletItem.path) {
             return {
               ...item,
               addWalletItemApi: {
@@ -105,7 +104,7 @@ export const addCardSubmitHandler =
       setState((prevState) => ({
         ...prevState,
         cards: prevState?.cards?.map((item) => {
-          if (item.uuid === newWalletItem.path) {
+          if (item.path === newWalletItem.path) {
             return {
               ...cardMapper(hdKey)(walletItem),
               addWalletItemApi: {
@@ -128,7 +127,7 @@ export const addCardSubmitHandler =
       setState((prevState) => ({
         ...prevState,
         cards: prevState?.cards?.map((item) => {
-          if (item.uuid === walletItem.path) {
+          if (item.path === walletItem.path) {
             return {
               ...item,
               addWalletItemApi: {
@@ -150,7 +149,7 @@ export const deleteCardHandler =
       setState((prevState) => ({
         ...prevState,
         cards: prevState?.cards?.map((item) => {
-          if (item.uuid === path) {
+          if (item.path === path) {
             return {
               ...item,
               deleteWalletItemApi: {
@@ -168,7 +167,7 @@ export const deleteCardHandler =
 
       setState((prevState) => ({
         ...prevState,
-        cards: prevState?.cards?.filter((item) => item.uuid !== pathDeleted),
+        cards: prevState?.cards?.filter((item) => item.path !== pathDeleted),
       }))
     } catch (e) {
       let error = "Un problème est survenu"
@@ -180,7 +179,7 @@ export const deleteCardHandler =
       setState((prevState) => ({
         ...prevState,
         cards: prevState?.cards?.map((item) => {
-          if (item.uuid === path) {
+          if (item.path === path) {
             return {
               ...item,
               deleteWalletItemApi: {

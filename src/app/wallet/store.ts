@@ -48,16 +48,6 @@ export const useStore = create<StoreType & ActionType>()(
         const hdKey = get().hdKey
         if (!hdKey) return
 
-        const defaultObject = {
-          link: "",
-          username: "",
-          length: 15,
-          hasUppercase: true,
-          hasLowercase: true,
-          hasNumeric: true,
-          hasSymbol: true,
-        }
-
         const path = generatePath()
         const password = generatePassword(hdKey, path)
 
@@ -66,7 +56,13 @@ export const useStore = create<StoreType & ActionType>()(
             state.cards.unshift({
               path,
               password,
-              ...defaultObject,
+              link: "",
+              username: "",
+              length: 15,
+              hasUppercase: true,
+              hasLowercase: true,
+              hasNumeric: true,
+              hasSymbol: true,
             })
           },
           false,
@@ -84,14 +80,6 @@ export const useStore = create<StoreType & ActionType>()(
                 isLoading: true,
               }
             },
-            // ({
-            //   ...state,
-            //   fetchWalletApi: {
-            //     error: undefined,
-            //     status: undefined,
-            //     isLoading: true,
-            //   },
-            // }),
             false,
             `fetchWallet/${LOADING_STATUS}`,
           )
@@ -113,16 +101,6 @@ export const useStore = create<StoreType & ActionType>()(
                 isLoading: false,
               }
             },
-            // ({
-            //     ...state,
-            //     hdKey,
-            //     cards,
-            //     fetchWalletApi: {
-            //       error: undefined,
-            //       status: 200,
-            //       isLoading: false,
-            //     },
-            //   }),
             false,
             `fetchWallet/${SUCCEEDED_STATUS}`,
           )
@@ -143,16 +121,6 @@ export const useStore = create<StoreType & ActionType>()(
                 isLoading: false,
               }
             },
-            // ({
-            //     ...state,
-            //     hdKey: undefined,
-            //     cards: undefined,
-            //     fetchWalletApi: {
-            //       error,
-            //       status,
-            //       isLoading: false,
-            //     },
-            //   }),
             false,
             `fetchWallet/${FAILED_STATUS}`,
           )
@@ -173,22 +141,6 @@ export const useStore = create<StoreType & ActionType>()(
                 isLoading: true,
               }
             },
-            // ({
-            //   ...state,
-            //   cards: state.cards.map((item) => {
-            //     if (item.path === walletItem.path) {
-            //       return {
-            //         ...item,
-            //         addWalletItemApi: {
-            //           error: undefined,
-            //           status: undefined,
-            //           isLoading: true,
-            //         },
-            //       }
-            //     }
-            //     return item
-            //   }),
-            // }),
             false,
             `addWalletItem/${LOADING_STATUS}`,
           )
@@ -208,22 +160,6 @@ export const useStore = create<StoreType & ActionType>()(
                 },
               }
             },
-            // ({
-            //   ...state,
-            //   cards: state.cards.map((item) => {
-            //     if (item.path === newWalletItem.path) {
-            //       return {
-            //         ...cardMapper(hdKey)(walletItem),
-            //         addWalletItemApi: {
-            //           error: undefined,
-            //           status: 200,
-            //           isLoading: false,
-            //         },
-            //       }
-            //     }
-            //     return item
-            //   }),
-            // }),
             false,
             `addWalletItem/${SUCCEEDED_STATUS}`,
           )
@@ -243,22 +179,6 @@ export const useStore = create<StoreType & ActionType>()(
                 isLoading: false,
               }
             },
-            // ({
-            //     ...state,
-            //     cards: state.cards.map((item) => {
-            //       if (item.path === walletItem.path) {
-            //         return {
-            //           ...item,
-            //           addWalletItemApi: {
-            //             error,
-            //             status,
-            //             isLoading: false,
-            //           },
-            //         }
-            //       }
-            //       return item
-            //     }),
-            //   }),
             false,
             `addWalletItem/${FAILED_STATUS}`,
           )
@@ -279,22 +199,6 @@ export const useStore = create<StoreType & ActionType>()(
                 isLoading: true,
               }
             },
-            // ({
-            //     ...state,
-            //     cards: state.cards.map((item) => {
-            //       if (item.path === path) {
-            //         return {
-            //           ...item,
-            //           deleteWalletItemApi: {
-            //             error: undefined,
-            //             status: undefined,
-            //             isLoading: true,
-            //           },
-            //         }
-            //       }
-            //       return item
-            //     }),
-            //   }),
             false,
             `deleteWalletItem/${LOADING_STATUS}`,
           )
@@ -306,11 +210,6 @@ export const useStore = create<StoreType & ActionType>()(
               const index = state.cards.findIndex((item) => item.path === pathDeleted)
               state.cards.splice(index, 1)
             },
-            // ({
-            //     ...state,
-            //     cards: state.cards.filter((item) => item.path !== pathDeleted),
-            //   })
-
             false,
             `deleteWalletItem/${SUCCEEDED_STATUS}`,
           )
@@ -330,22 +229,6 @@ export const useStore = create<StoreType & ActionType>()(
                 isLoading: false,
               }
             },
-            // ({
-            //     ...state,
-            //     cards: state.cards.map((item) => {
-            //       if (item.path === path) {
-            //         return {
-            //           ...item,
-            //           deleteWalletItemApi: {
-            //             error,
-            //             status,
-            //             isLoading: false,
-            //           },
-            //         }
-            //       }
-            //       return item
-            //     }),
-            //   }),
             false,
             `deleteWalletItem/${FAILED_STATUS}`,
           )

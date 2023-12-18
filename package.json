@@ -19,7 +19,8 @@
     "mongoose": "^8.0.3",
     "next": "^14.0.2",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
     "@rhannachi/eslint-config-prettier": "^1.3.0",

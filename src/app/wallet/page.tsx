@@ -1,16 +1,8 @@
 "use client"
 
 import dynamic from "next/dynamic"
-import React from "react"
-import { generatePassword, generatePath } from "@/helpers"
 import Button from "@/components/Button"
-import {
-  addCardSubmitHandler,
-  deleteCardHandler,
-  fetchWalletHandler,
-  StateTypes,
-} from "./page.state"
-import HdKey from "hdkey"
+import { useStore } from "./store"
 
 const Form = dynamic(() => import("./Form"), {
   loading: () => <p className="text-white">Loading...</p>,
@@ -22,57 +14,15 @@ const Card = dynamic(() => import("./Card"), {
 })
 
 export default function Page() {
-  const [state, setState] = React.useState<StateTypes>({})
+  const { hdKey, cards, fetchWalletApi, addCard, fetchWallet, addWalletItem, deleteWalletItem } =
+    useStore()
 
-  const addCard = () => {
-    setState((prevState) => {
-      if (!prevState?.hdKey) return prevState
-
-      const defaultObject = {
-        link: "",
-        username: "",
-        length: 15,
-        hasUppercase: true,
-        hasLowercase: true,
-        hasNumeric: true,
-        hasSymbol: true,
-      }
-
-      const path = generatePath()
-      const password = generatePassword(prevState.hdKey, path)
-
-      if (!prevState.cards?.length) {
-        return {
-          ...prevState,
-          cards: [
-            {
-              path: path,
-              password,
-              ...defaultObject,
-            },
-          ],
-        }
-      }
-      return {
-        ...prevState,
-        cards: [
-          {
-            path: path,
-            password,
-            ...defaultObject,
-          },
-          ...prevState.cards,
-        ],
-      }
-    })
-  }
-
-  const isLoading = state && state?.fetchWalletApi?.isLoading
+  const isLoading = fetchWalletApi?.isLoading
   const invalidCredential =
-    !isLoading && state?.fetchWalletApi?.status === 403 ? state?.fetchWalletApi.error : undefined
+    !isLoading && fetchWalletApi?.status === 403 ? fetchWalletApi.error : undefined
   const unknownError =
-    !isLoading && state?.fetchWalletApi?.status !== 200 && state?.fetchWalletApi?.status !== 403
-      ? state?.fetchWalletApi?.error
+    !isLoading && fetchWalletApi?.status !== 200 && fetchWalletApi?.status !== 403
+      ? fetchWalletApi?.error
       : undefined
 
   return (
@@ -94,19 +44,19 @@ export default function Page() {
         {/* </p>*/}
       </header>
       {/** * Form ****/}
-      {!state?.hdKey && (
+      {!hdKey && (
         <section className="flex flex-col max-w-md w-full mt-10">
           <article>
             <Form
               isLoading={isLoading}
               error={invalidCredential || unknownError}
-              handleSubmit={fetchWalletHandler(setState)}
+              handleSubmit={fetchWallet()}
             />
           </article>
         </section>
       )}
       <section className="flex h-10 mt-10 max-w-md">
-        {state?.hdKey && (
+        {hdKey && (
           <Button onClick={addCard} style="secondary" className="px-10 text-white border-white">
             <div className="flex flex-row items-center justify-between">
               <div className="mr-2">Ajouter un password</div>
@@ -129,14 +79,14 @@ export default function Page() {
       </section>
       {/** * Cards ****/}
       <div className="my-10 text-white">
-        {state?.cards && state.hdKey && (
+        {cards && hdKey && (
           <section className="justify-items-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
-            {state.cards.map((card) => (
+            {cards.map((card) => (
               <Card
                 {...card}
                 key={card.path}
-                handleSubmit={addCardSubmitHandler(state.hdKey as HdKey, setState)}
-                handleDelete={deleteCardHandler(state.hdKey as HdKey, setState)}
+                handleSubmit={addWalletItem()}
+                handleDelete={deleteWalletItem()}
                 className="m-1"
               />
             ))}

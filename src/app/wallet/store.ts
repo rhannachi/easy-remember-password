@@ -1,4 +1,7 @@
-import { generateHdKey } from "@/helpers"
+import { WalletType } from "@/types"
+import HdKey from "hdkey"
+import { create } from "zustand"
+import { generateHdKey, generatePassword, generatePath } from "@/helpers"
 import {
   addWalletItemApi,
   deleteWalletItemApi,
@@ -6,34 +9,65 @@ import {
   fetchWalletApi,
 } from "@/app/wallet/wallet.service"
 import { cardMapper, cardsMapper } from "@/app/wallet/page.mapper"
-import { Dispatch, SetStateAction } from "react"
-import { WalletType } from "@/types"
-import HdKey from "hdkey"
 
 export type ResponseApiType = {
   status?: number
   isLoading: boolean
   error?: string
 }
-
 export type CardType = WalletType & {
   password: string
   addWalletItemApi?: ResponseApiType
   deleteWalletItemApi?: ResponseApiType
 }
-
-export type StateTypes = {
-  hdKey?: HdKey
-  cards?: CardType[]
+export type StoreType = {
+  hdKey: HdKey | undefined
+  cards: CardType[]
   fetchWalletApi?: ResponseApiType
+  addCard: () => void
+  fetchWallet: () => (passphrase: string, password: string) => void
+  addWalletItem: () => (walletItem: WalletType) => void
+  deleteWalletItem: () => (path: string) => void
 }
 
-export const fetchWalletHandler =
-  (setState: Dispatch<SetStateAction<StateTypes>>) =>
-  async (passphrase: string, password: string) => {
+export const useStore = create<StoreType>((set, get) => ({
+  hdKey: undefined,
+  cards: [],
+  // Add Card
+  addCard: () => {
+    const hdKey = get().hdKey
+    if (!hdKey) return
+
+    const defaultObject = {
+      link: "",
+      username: "",
+      length: 15,
+      hasUppercase: true,
+      hasLowercase: true,
+      hasNumeric: true,
+      hasSymbol: true,
+    }
+
+    const path = generatePath()
+    const password = generatePassword(hdKey, path)
+
+    set((state) => ({
+      ...state,
+      cards: [
+        {
+          path,
+          password,
+          ...defaultObject,
+        },
+        ...state.cards,
+      ],
+    }))
+  },
+  // Fetch wallet
+  fetchWallet: () => async (passphrase, password) => {
     try {
-      setState((prevState) => ({
-        ...prevState,
+      set((state) => ({
+        ...state,
         hdKey: undefined,
         cards: undefined,
         fetchWalletApi: {
@@ -48,8 +82,8 @@ export const fetchWalletHandler =
       const wallet = await fetchWalletApi(hdKey.publicExtendedKey)
       const cards = cardsMapper(hdKey, wallet)
 
-      setState((prevState) => ({
-        ...prevState,
+      set((state) => ({
+        ...state,
         hdKey,
         cards,
         fetchWalletApi: {
@@ -65,8 +99,8 @@ export const fetchWalletHandler =
         status = e.status
         error = e.error
       }
-      setState((prevState) => ({
-        ...prevState,
+      set((state) => ({
+        ...state,
         hdKey: undefined,
         cards: undefined,
         fetchWalletApi: {
@@ -76,15 +110,16 @@ export const fetchWalletHandler =
         },
       }))
     }
-  }
-
-export const addCardSubmitHandler =
-  (hdKey: HdKey, setState: Dispatch<SetStateAction<StateTypes>>) =>
-  async (walletItem: WalletType) => {
+  },
+  // Add or Update wallet item
+  addWalletItem: () => async (walletItem) => {
     try {
-      setState((prevState) => ({
-        ...prevState,
-        cards: prevState?.cards?.map((item) => {
+      const hdKey = get().hdKey
+      if (!hdKey) return
+
+      set((state) => ({
+        ...state,
+        cards: state.cards.map((item) => {
           if (item.path === walletItem.path) {
             return {
               ...item,
@@ -101,9 +136,9 @@ export const addCardSubmitHandler =
 
       const newWalletItem = await addWalletItemApi(hdKey.publicExtendedKey, walletItem)
 
-      setState((prevState) => ({
-        ...prevState,
-        cards: prevState?.cards?.map((item) => {
+      set((state) => ({
+        ...state,
+        cards: state.cards.map((item) => {
           if (item.path === newWalletItem.path) {
             return {
               ...cardMapper(hdKey)(walletItem),
@@ -124,9 +159,9 @@ export const addCardSubmitHandler =
         status = e.status
         error = e.error
       }
-      setState((prevState) => ({
-        ...prevState,
-        cards: prevState?.cards?.map((item) => {
+      set((state) => ({
+        ...state,
+        cards: state.cards.map((item) => {
           if (item.path === walletItem.path) {
             return {
               ...item,
@@ -141,14 +176,16 @@ export const addCardSubmitHandler =
         }),
       }))
     }
-  }
-
-export const deleteCardHandler =
-  (hdKey: HdKey, setState: Dispatch<SetStateAction<StateTypes>>) => async (path: string) => {
+  },
+  // Delete wallet item
+  deleteWalletItem: () => async (path) => {
     try {
-      setState((prevState) => ({
-        ...prevState,
-        cards: prevState?.cards?.map((item) => {
+      const hdKey = get().hdKey
+      if (!hdKey) return
+
+      set((state) => ({
+        ...state,
+        cards: state.cards.map((item) => {
           if (item.path === path) {
             return {
               ...item,
@@ -165,9 +202,9 @@ export const deleteCardHandler =
 
       const pathDeleted = await deleteWalletItemApi(hdKey.publicExtendedKey, path)
 
-      setState((prevState) => ({
-        ...prevState,
-        cards: prevState?.cards?.filter((item) => item.path !== pathDeleted),
+      set((state) => ({
+        ...state,
+        cards: state.cards.filter((item) => item.path !== pathDeleted),
       }))
     } catch (e) {
       let error = "Un problème est survenu"
@@ -176,9 +213,9 @@ export const deleteCardHandler =
         status = e.status
         error = e.error
       }
-      setState((prevState) => ({
-        ...prevState,
-        cards: prevState?.cards?.map((item) => {
+      set((state) => ({
+        ...state,
+        cards: state.cards.map((item) => {
           if (item.path === path) {
             return {
               ...item,
@@ -193,4 +230,5 @@ export const deleteCardHandler =
         }),
       }))
     }
-  }
+  },
+}))

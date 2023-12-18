@@ -8,7 +8,7 @@ import Checkbox from "@/components/Checkbox"
 import Range from "@/components/Range"
 import Button from "@/components/Button"
 import Password from "@/components/Password"
-import { CardType } from "@/app/wallet/page.state"
+import { CardType } from "@/app/wallet/store"
 
 const isFormValid = (state: StateType) => state.link && state.username
 

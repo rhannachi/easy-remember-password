@@ -16,6 +16,16 @@ const LOADING_STATUS = "loading" as const
 const SUCCEEDED_STATUS = "succeeded" as const
 const FAILED_STATUS = "failed" as const
 
+const getError = (e: unknown) => {
+  let error = "Un problème est survenu"
+  let status = 500
+  if (e instanceof ErrorApi) {
+    status = e.status
+    error = e.error
+  }
+  return { status, error }
+}
+
 type ResponseApiType = {
   status?: number
   isLoading: boolean
@@ -45,29 +55,35 @@ export const useStore = create<StoreType & ActionType>()(
       cards: [],
       // Add Card
       addCard: () => {
-        const hdKey = get().hdKey
-        if (!hdKey) return
+        try {
+          const hdKey = get().hdKey
+          if (!hdKey) return
 
-        const path = generatePath()
-        const password = generatePassword(hdKey, path)
+          const path = generatePath()
+          const password = generatePassword(hdKey, path)
 
-        set(
-          (state) => {
-            state.cards.unshift({
-              path,
-              password,
-              link: "",
-              username: "",
-              length: 15,
-              hasUppercase: true,
-              hasLowercase: true,
-              hasNumeric: true,
-              hasSymbol: true,
-            })
-          },
-          false,
-          "addCard",
-        )
+          set(
+            (state) => {
+              state.cards.unshift({
+                path,
+                password,
+                link: "",
+                username: "",
+                length: 15,
+                hasUppercase: true,
+                hasLowercase: true,
+                hasNumeric: true,
+                hasSymbol: true,
+              })
+            },
+            false,
+            "addCard",
+          )
+        } catch (e) {
+          const { status, error } = getError(e)
+          // TODO remove this !!!! set()...
+          console.error(status, error)
+        }
       },
       // Fetch wallet
       fetchWallet: () => async (passphrase, password) => {
@@ -105,12 +121,7 @@ export const useStore = create<StoreType & ActionType>()(
             `fetchWallet/${SUCCEEDED_STATUS}`,
           )
         } catch (e) {
-          let error = "Un problème est survenu"
-          let status = 500
-          if (e instanceof ErrorApi) {
-            status = e.status
-            error = e.error
-          }
+          const { status, error } = getError(e)
           set(
             (state) => {
               state.hdKey = undefined
@@ -164,12 +175,7 @@ export const useStore = create<StoreType & ActionType>()(
             `addWalletItem/${SUCCEEDED_STATUS}`,
           )
         } catch (e) {
-          let error = "Un problème est survenu"
-          let status = 500
-          if (e instanceof ErrorApi) {
-            status = e.status
-            error = e.error
-          }
+          const { status, error } = getError(e)
           set(
             (state) => {
               const index = state.cards.findIndex((item) => item.path === walletItem.path)
@@ -214,12 +220,7 @@ export const useStore = create<StoreType & ActionType>()(
             `deleteWalletItem/${SUCCEEDED_STATUS}`,
           )
         } catch (e) {
-          let error = "Un problème est survenu"
-          let status = 500
-          if (e instanceof ErrorApi) {
-            status = e.status
-            error = e.error
-          }
+          const { status, error } = getError(e)
           set(
             (state) => {
               const index = state.cards.findIndex((item) => item.path === path)

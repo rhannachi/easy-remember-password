@@ -2,15 +2,15 @@ import { NextApiRequest, NextApiResponse } from "next"
 import connectDB from "@/pages/db"
 import { findUser } from "@/pages/user.repo"
 import { UserModel } from "@/pages/user.model"
-import { IWallet } from "@/types"
+import { WalletType } from "@/types"
 
-export interface IWalletCreatePayload extends IWallet {
+export type WalletCreatePayloadType = WalletType & {
   publicExtendedKey: string
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { publicExtendedKey, ...walletItem } = req.body as IWalletCreatePayload
+    const { publicExtendedKey, ...walletItem } = req.body as WalletCreatePayloadType
 
     // TODO move ?
     await connectDB()

@@ -1,6 +1,6 @@
-import type { IWallet } from "@/types"
-import { IWalletCreatePayload } from "@/pages/api/wallet/create"
-import { IWalletDeletePayload } from "@/pages/api/wallet/delete"
+import type { WalletType } from "@/types"
+import { WalletCreatePayloadType } from "@/pages/api/wallet/create"
+import { WalletDeletePayloadType } from "@/pages/api/wallet/delete"
 
 export class ErrorApi extends Error {
   status: number
@@ -12,7 +12,7 @@ export class ErrorApi extends Error {
   }
 }
 
-export const fetchWalletApi = async (publicExtendedKey: string): Promise<IWallet[]> => {
+export const fetchWalletApi = async (publicExtendedKey: string): Promise<WalletType[]> => {
   try {
     const response = await fetch("/api/wallet", {
       method: "POST",
@@ -22,7 +22,7 @@ export const fetchWalletApi = async (publicExtendedKey: string): Promise<IWallet
       body: JSON.stringify({ publicExtendedKey }),
     })
     if (response.ok) {
-      return (await response.json()).wallet as IWallet[]
+      return (await response.json()).wallet as WalletType[]
     }
 
     throw new ErrorApi((await response.json()).error, response.status)
@@ -36,10 +36,10 @@ export const fetchWalletApi = async (publicExtendedKey: string): Promise<IWallet
 
 export const addWalletItemApi = async (
   publicExtendedKey: string,
-  walletItem: IWallet,
-): Promise<IWallet> => {
+  walletItem: WalletType,
+): Promise<WalletType> => {
   try {
-    const payload: IWalletCreatePayload = {
+    const payload: WalletCreatePayloadType = {
       publicExtendedKey,
       ...walletItem,
     }
@@ -51,7 +51,7 @@ export const addWalletItemApi = async (
       body: JSON.stringify(payload),
     })
     if (response.ok) {
-      return (await response.json()).walletItem as IWallet
+      return (await response.json()).walletItem as WalletType
     }
 
     throw new ErrorApi((await response.json()).error, response.status)
@@ -68,7 +68,7 @@ export const deleteWalletItemApi = async (
   path: string,
 ): Promise<string> => {
   try {
-    const payload: IWalletDeletePayload = {
+    const payload: WalletDeletePayloadType = {
       publicExtendedKey,
       path,
     }

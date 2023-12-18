@@ -8,7 +8,7 @@ declare global {
   }
 }
 
-export interface IWallet {
+export type WalletType = {
   path: string
   link: string
   username: string
@@ -19,10 +19,10 @@ export interface IWallet {
   length: number
 }
 
-export interface IUser {
+export type UserType = {
   _id: Types.ObjectId
   publicExtendedKey: string
-  wallet: IWallet[]
+  wallet: WalletType[]
   createdAt?: Date
   updatedAt?: Date
 }

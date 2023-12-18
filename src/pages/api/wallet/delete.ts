@@ -3,14 +3,14 @@ import connectDB from "@/pages/db"
 import { UserModel } from "@/pages/user.model"
 import { findUser } from "@/pages/user.repo"
 
-export interface IWalletDeletePayload {
+export type WalletDeletePayloadType = {
   path: string
   publicExtendedKey: string
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { publicExtendedKey, path } = req.body as IWalletDeletePayload
+    const { publicExtendedKey, path } = req.body as WalletDeletePayloadType
 
     // TODO move ?
     await connectDB()

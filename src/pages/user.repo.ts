@@ -1,7 +1,7 @@
-import { IUser } from "@/types"
+import { UserType } from "@/types"
 import { UserModel } from "@/pages/user.model"
 
-export const findUser = async (publicExtendedKey: string): Promise<IUser | null> => {
+export const findUser = async (publicExtendedKey: string): Promise<UserType | null> => {
   return UserModel.findOne({
     publicExtendedKey,
   })

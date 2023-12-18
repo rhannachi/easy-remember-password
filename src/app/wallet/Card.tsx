@@ -2,7 +2,7 @@
 
 import clsx from "clsx"
 import React from "react"
-import type { IWallet } from "@/types"
+import type { WalletType } from "@/types"
 import InputCustom from "@/components/InputCustom"
 import Checkbox from "@/components/Checkbox"
 import Range from "@/components/Range"
@@ -46,7 +46,7 @@ export default function Card({
   handleSubmit,
   handleDelete,
 }: CardType & {
-  handleSubmit: (walletItem: IWallet) => void
+  handleSubmit: (walletItem: WalletType) => void
   handleDelete: (uuid: string) => void
   className?: string
 }) {

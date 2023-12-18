@@ -1,7 +1,7 @@
-import type { IUser } from "@/types"
+import type { UserType } from "@/types"
 import { Types } from "mongoose"
 
-export const users: IUser[] = [
+export const users: UserType[] = [
   {
     // password: ramzi
     // pasphrase: ramzi

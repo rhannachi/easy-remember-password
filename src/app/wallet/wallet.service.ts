@@ -2,6 +2,10 @@ import type { WalletType } from "@/types"
 import { WalletCreatePayloadType } from "@/pages/api/wallet/create"
 import { WalletDeletePayloadType } from "@/pages/api/wallet/delete"
 
+const FETCH_WALLET_URL_API = "/api/wallet" as const
+const ADD_WALLET_URL_API = "/api/wallet/create" as const
+const DELETE_WALLET_URL_API = "/api/wallet/delete" as const
+
 export class ErrorApi extends Error {
   status: number
   error: string
@@ -14,7 +18,7 @@ export class ErrorApi extends Error {
 
 export const fetchWalletApi = async (publicExtendedKey: string): Promise<WalletType[]> => {
   try {
-    const response = await fetch("/api/wallet", {
+    const response = await fetch(FETCH_WALLET_URL_API, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -43,7 +47,7 @@ export const addWalletItemApi = async (
       publicExtendedKey,
       ...walletItem,
     }
-    const response = await fetch("/api/wallet/create", {
+    const response = await fetch(ADD_WALLET_URL_API, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -72,7 +76,7 @@ export const deleteWalletItemApi = async (
       publicExtendedKey,
       path,
     }
-    const response = await fetch("/api/wallet/delete", {
+    const response = await fetch(DELETE_WALLET_URL_API, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

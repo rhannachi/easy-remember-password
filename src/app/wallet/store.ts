@@ -57,7 +57,7 @@ export const useStore = create<StoreType & ActionType>()(
       addCard: () => {
         try {
           const hdKey = get().hdKey
-          if (!hdKey) return
+          if (!hdKey) throw new Error() // TODO ......
 
           const path = generatePath()
           const password = generatePassword(hdKey, path)
@@ -88,6 +88,9 @@ export const useStore = create<StoreType & ActionType>()(
       // Fetch wallet
       fetchWallet: () => async (passphrase, password) => {
         try {
+          const hdKey = await generateHdKey(passphrase, password)
+          if (!hdKey) throw new Error() // TODO ......
+
           set(
             (state) => {
               state.fetchWalletApi = {
@@ -100,8 +103,6 @@ export const useStore = create<StoreType & ActionType>()(
             `fetchWallet/${LOADING_STATUS}`,
           )
 
-          const hdKey = await generateHdKey(passphrase, password)
-          if (!hdKey) return
           const wallet = await fetchWalletApi(hdKey.publicExtendedKey)
 
           set(
@@ -141,11 +142,11 @@ export const useStore = create<StoreType & ActionType>()(
       addWalletItem: () => async (walletItem) => {
         try {
           const hdKey = get().hdKey
-          if (!hdKey) return
+          if (!hdKey) throw new Error() // TODO ......
 
           set(
             (state) => {
-              const index = state.cards.findIndex((item) => item.path === walletItem.path)
+              const index = state.cards.findIndex(({ path }) => path === walletItem.path)
               state.cards[index].addWalletItemApi = {
                 error: undefined,
                 status: undefined,
@@ -160,7 +161,7 @@ export const useStore = create<StoreType & ActionType>()(
 
           set(
             (state) => {
-              const index = state.cards.findIndex((item) => item.path === newWalletItem.path)
+              const index = state.cards.findIndex(({ path }) => path === newWalletItem.path)
               state.cards[index] = {
                 ...newWalletItem,
                 password: generatePassword(hdKey, walletItem.path),
@@ -178,7 +179,7 @@ export const useStore = create<StoreType & ActionType>()(
           const { status, error } = getError(e)
           set(
             (state) => {
-              const index = state.cards.findIndex((item) => item.path === walletItem.path)
+              const index = state.cards.findIndex(({ path }) => path === walletItem.path)
               state.cards[index].addWalletItemApi = {
                 error,
                 status,
@@ -194,7 +195,7 @@ export const useStore = create<StoreType & ActionType>()(
       deleteWalletItem: () => async (path) => {
         try {
           const hdKey = get().hdKey
-          if (!hdKey) return
+          if (!hdKey) throw new Error() // TODO ......
 
           set(
             (state) => {
